@@ -9,32 +9,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ScrollController _scrollController;
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       body: CustomScrollView(
-        controller: _scrollController,
         slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.black,
-            title: Text(
-              'Aba Time',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  .copyWith(letterSpacing: -1.5),
-            ),
-            floating: true,
-          ),
+          CustomAppBar(),
           SliverPadding(
             padding: const EdgeInsets.symmetric(
               vertical: 4.0,
@@ -42,20 +23,28 @@ class _HomeScreenState extends State<HomeScreen> {
             sliver: SliverToBoxAdapter(
               child: MovieContainer(
                 key: PageStorageKey('NewMovies'),
-                title: "New Movies",
+                title: "Recently Added",
               ),
             ),
           ),
-          // SliverPadding(
-          //   padding: const EdgeInsets.symmetric(vertical: 4.0),
-          //   sliver: SliverToBoxAdapter(
-          //     child: PreviewContainer(
-          //       key: PageStorageKey('myLists'),
-          //       title: "My Lists",
-          //       lists: myList,
-          //     ),
-          //   ),
-          // ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            sliver: SliverToBoxAdapter(
+              child: MovieContainer(
+                key: PageStorageKey('topRated'),
+                title: "Top Rated",
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            sliver: SliverToBoxAdapter(
+              child: MovieContainer(
+                key: PageStorageKey('Most Downloaded'),
+                title: "Most Downloads",
+              ),
+            ),
+          ),
           // SliverPadding(
           //   padding: const EdgeInsets.symmetric(vertical: 4.0),
           //   sliver: SliverToBoxAdapter(

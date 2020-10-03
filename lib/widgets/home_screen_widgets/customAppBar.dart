@@ -1,113 +1,78 @@
 import 'package:AbaTime/assets.dart';
+import 'package:AbaTime/model/movie.dart';
 import 'package:AbaTime/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
-  final scrollOffset;
-  const CustomAppBar({Key key, this.scrollOffset}) : super(key: key);
+  const CustomAppBar({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(scrollOffset);
-    return ResponsiveWidget(
-      mobile: _mobileAppBar(),
-      tablet: _tabletAppBar(),
-    );
-  }
-
-  Widget _mobileAppBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      color:
-          Colors.black.withOpacity((scrollOffset / 360).clamp(0, 1).toDouble()),
-      child: Row(
-        children: [
-          Image.asset(
-            Assets.netflixLogo0,
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _AppBarButton(
-                  label: "All Shows",
-                  onTap: () => print('AllShows'),
-                ),
-                _AppBarButton(label: "Movie", onTap: () {}),
-                _AppBarButton(label: "My List", onTap: () {}),
-                // const Spacer(),
-              ],
-            ),
-          )
-        ],
+    return SliverAppBar(
+      backgroundColor: Colors.black,
+      title: Text(
+        'Aba Time',
+        style:
+            Theme.of(context).textTheme.headline4.copyWith(letterSpacing: -1.5),
       ),
-    );
-  }
-
-  Widget _tabletAppBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
-      color:
-          Colors.black.withOpacity((scrollOffset / 360).clamp(0, 1).toDouble()),
-      child: Row(
-        children: [
-          Image.asset(
-            Assets.netflixLogo1,
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _AppBarButton(label: "Home", onTap: () {}),
-                _AppBarButton(
-                  label: "TV Shows",
-                  onTap: () => print('AllShows'),
-                ),
-                _AppBarButton(label: "Movies", onTap: () {}),
-                _AppBarButton(label: "Latest", onTap: () {}),
-                _AppBarButton(label: "My List", onTap: () {}),
-                IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    size: 30,
-                  ),
-                  onPressed: () => print('searching...'),
-                ),
-                _AppBarButton(label: "KIDS", onTap: () {}),
-                IconButton(
-                  icon: Icon(
-                    Icons.notifications,
-                    size: 30,
-                  ),
-                  onPressed: () => print('searching...'),
-                ),
-              ],
+      centerTitle: true,
+      floating: true,
+      bottom: PreferredSize(
+        child: GestureDetector(
+          onTap: () => showSearch(context: context, delegate: MovieSearch()),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            margin: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Theme.of(context).secondaryHeaderColor,
+              borderRadius: BorderRadius.circular(20.0),
             ),
-          )
-        ],
+            child: Text(
+              'Search',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(color: Color(0xFFa0a0a0)),
+            ),
+          ),
+        ),
+        preferredSize: Size(MediaQuery.of(context).size.width, 50),
       ),
     );
   }
 }
 
-class _AppBarButton extends StatelessWidget {
-  final label;
-  final Function onTap;
-  const _AppBarButton({Key key, this.label, this.onTap}) : super(key: key);
+class MovieSearch extends SearchDelegate<Movie> {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.cancel),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.grey,
-      onTap: onTap,
-      child: Container(
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.bodyText1.copyWith(
-                color: Colors.white,
-              ),
-        ),
-      ),
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () => close(context, null),
     );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Container();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Text(query);
   }
 }

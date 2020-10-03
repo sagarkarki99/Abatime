@@ -1,50 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class ContentHeader extends StatelessWidget {
-  final String featuredImage;
-  final List<dynamic> genres;
-  final num ratings;
+  final String sc1;
+  final String sc2;
+  final String sc3;
 
-  const ContentHeader({Key key, this.featuredImage, this.genres, this.ratings})
+  final Widget child;
+
+  const ContentHeader({Key key, this.child, this.sc1, this.sc2, this.sc3})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.center,
       children: [
-        Container(
-          height: 400.0,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: NetworkImage(featuredImage),
-            ),
-            color: Colors.brown,
+        CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: true,
+            viewportFraction: 1,
+            height: 400.0,
+            autoPlayInterval: Duration(seconds: 4),
           ),
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.black],
-              ),
-            ),
-          ),
+          items: [
+            BgImage(featuredImage: sc1),
+            BgImage(featuredImage: sc2),
+            BgImage(featuredImage: sc3),
+          ],
         ),
         Positioned(
-            left: 0,
-            right: 0,
-            bottom: 30,
-            child: Row(
-              children: [
-                ...List.generate(2, (index) => Text(genres[index])).toList(),
-                Spacer(),
-                Text(ratings.toString()),
-                Icon(Icons.star)
-              ],
-            )),
+          left: 0.0,
+          bottom: 30.0,
+          child: child,
+        ),
       ],
+    );
+  }
+}
+
+class BgImage extends StatelessWidget {
+  final String featuredImage;
+
+  BgImage({Key key, this.featuredImage}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.fill,
+          image: NetworkImage(featuredImage),
+        ),
+        color: Colors.black,
+      ),
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.transparent, Colors.black],
+          ),
+        ),
+      ),
     );
   }
 }

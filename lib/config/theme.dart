@@ -8,10 +8,12 @@ class MyTheme {
   const MyTheme({Key key});
   static final _appPrimaryColor = Colors.blue;
   static final _appAccentColor = Colors.purple;
-
+  static final _appSecondaryColor = Color(0xFF232323);
   static ThemeData _myAndroidTheme(ThemeData baseTheme) {
     return baseTheme.copyWith(
+      brightness: Brightness.light,
       primaryColor: _appPrimaryColor,
+      secondaryHeaderColor: _appSecondaryColor,
       accentColor: _appAccentColor,
       errorColor: Colors.red[700],
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -20,7 +22,7 @@ class MyTheme {
       primaryTextTheme: _myAppTextTheme(baseTheme.textTheme),
       accentTextTheme: _myAppTextTheme(baseTheme.textTheme),
       appBarTheme: AppBarTheme(
-        color: Colors.white,
+        color: Colors.black,
         brightness: Brightness.light,
         elevation: 4,
         textTheme: TextTheme(
@@ -51,9 +53,9 @@ class MyTheme {
           headline6: baseTextTheme.headline6.copyWith(
             fontSize: 18.0,
           ),
+          headline4: GoogleFonts.satisfy().copyWith(color: Colors.white),
           caption: baseTextTheme.caption.copyWith(
             fontWeight: FontWeight.w400,
-            fontSize: 14.0,
           ),
           bodyText1: baseTextTheme.bodyText1.copyWith(
             fontWeight: FontWeight.w500,

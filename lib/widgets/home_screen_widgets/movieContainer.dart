@@ -1,5 +1,9 @@
 import 'package:AbaTime/model/movie.dart';
-import 'package:AbaTime/provider/MoviesProvider.dart';
+import 'package:AbaTime/provider/moviesProvider.dart';
+import 'package:AbaTime/shimmers/movieListShimmer.dart';
+import 'package:AbaTime/shimmers/shimmerItem.dart';
+import 'package:AbaTime/widgets/widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,10 +20,10 @@ class MovieContainer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
           child: Text(
             title,
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headline6,
           ),
         ),
         SizedBox(height: 8.0),
@@ -28,9 +32,7 @@ class MovieContainer extends StatelessWidget {
               .fetchAllMovies(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(strokeWidth: 2),
-              );
+              return MovieListShimmer();
             } else if (snapshot.error != null) {
               return Text('No Movies Available');
             } else {
@@ -48,7 +50,6 @@ class MovieListContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final movieProvider = Provider.of<MovieProvider>(context, listen: false);
     final movies = movieProvider.allMovies;
-    print(movies.length);
     return Container(
       height: 200,
       child: ListView.builder(
@@ -58,11 +59,12 @@ class MovieListContainer extends StatelessWidget {
           onTap: () => navigateToNextScreen(context, movies[index]),
           child: Container(
             margin: const EdgeInsets.fromLTRB(8.0, 2.0, 0.0, 4.0),
-            child: FadeInImage.assetNetwork(
+            child: CachedNetworkImage(
+              imageUrl: movies[index].mediumCoverImage ??
+                  movies[index].largeCoverImage,
+              placeholder: (_, url) => ShimmerItem(),
               fadeInDuration: Duration(milliseconds: 500),
-              placeholder: 'h',
-              image: movies[index].largeCoverImage,
-              width: 110,
+              fadeInCurve: Curves.bounceInOut,
             ),
           ),
         ),
@@ -71,6 +73,7 @@ class MovieListContainer extends StatelessWidget {
   }
 
   navigateToNextScreen(BuildContext context, Movie movie) {
-    Navigator.of(context).pushNamed(routes.movieDetailScreen, arguments: movie);
+    Navigator.of(context)
+        .pushNamed(routes.movieDetailScreen, arguments: movie.id);
   }
 }
