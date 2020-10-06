@@ -10,14 +10,25 @@ import '../repository/localDatabase.dart' as localDb;
 
 class MovieProvider extends ChangeNotifier {
   List<Movie> movies = [];
+  List<Movie> _searchedMovies;
 
   List<Movie> get allMovies => [...movies];
+  List<Movie> get allSearchedMovies => [..._searchedMovies];
 
-  Future<void> fetchAllMovies() async {
+  Future<void> fetchAllMovies(String sortName, String genre) async {
     try {
       final data = await ApiClient.getInstance().get(
         MOVIE_LIST,
-        {'limit': 20},
+        genre == 'All'
+            ? {
+                'limit': 20,
+                'sort_by': sortName,
+              }
+            : {
+                'limit': 20,
+                'sort_by': sortName,
+                'genre': genre,
+              },
       );
       MovieResponse movieResponse = MovieResponse.fromJson(data);
       movies = movieResponse.data.movies;
@@ -37,6 +48,23 @@ class MovieProvider extends ChangeNotifier {
       movieDetail.MovieDetail detail =
           movieDetail.MovieDetail.fromJson(response);
       return detail.data.movie;
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
+  }
+
+  Future<void> searchMovieApi(String query) async {
+    _searchedMovies = List();
+    notifyListeners();
+    try {
+      final responses = await ApiClient.getInstance().get(MOVIE_LIST, {
+        'query_term': query,
+      });
+      MovieResponse movieResponse = MovieResponse.fromJson(responses);
+      print(responses);
+
+      _searchedMovies = [...movieResponse.data.movies];
+      notifyListeners();
     } catch (error) {
       throw HttpException(error.toString());
     }

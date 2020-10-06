@@ -1,6 +1,8 @@
+import 'package:AbaTime/provider/allProviders.dart';
 import 'package:AbaTime/screens/screens.dart';
 import 'package:AbaTime/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NavScreen extends StatefulWidget {
   NavScreen({Key key}) : super(key: key);
@@ -13,7 +15,9 @@ class _NavScreenState extends State<NavScreen> {
   var _currentIndex = 0;
 
   List<Widget> _screens = [
-    HomeScreen(key: PageStorageKey('HomeScreen')),
+    ChangeNotifierProvider(
+        create: (_) => GenreProvider(),
+        builder: (context, _) => HomeScreen(key: PageStorageKey('HomeScreen'))),
     TvShowScreen(),
     SearchScreen(),
     WatchListScreen(),

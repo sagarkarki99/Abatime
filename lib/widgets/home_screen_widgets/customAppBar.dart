@@ -1,13 +1,25 @@
 import 'package:AbaTime/assets.dart';
 import 'package:AbaTime/model/movie.dart';
+import 'package:AbaTime/provider/genresProvider.dart';
 import 'package:AbaTime/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({Key key}) : super(key: key);
+class CustomAppBar extends StatefulWidget {
+  CustomAppBar({Key key}) : super(key: key);
+
+  @override
+  _CustomAppBarState createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  var _currentChoiceIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final genreProvider = Provider.of<GenreProvider>(context, listen: false);
+    final genres = genreProvider.allGenres;
+
     return SliverAppBar(
       backgroundColor: Colors.black,
       title: Text(
@@ -18,61 +30,37 @@ class CustomAppBar extends StatelessWidget {
       centerTitle: true,
       floating: true,
       bottom: PreferredSize(
-        child: GestureDetector(
-          onTap: () => showSearch(context: context, delegate: MovieSearch()),
-          child: Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            margin: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
-            height: 40,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Theme.of(context).secondaryHeaderColor,
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Text(
-              'Search',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  .copyWith(color: Color(0xFFa0a0a0)),
+        child: Container(
+          key: PageStorageKey('genres'),
+          alignment: Alignment.centerLeft,
+          margin: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
+          height: 40,
+          width: MediaQuery.of(context).size.width,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: genres.length,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6.0),
+              child: ChoiceChip(
+                  selected: _currentChoiceIndex == index,
+                  onSelected: (selectedValue) {
+                    genreProvider.setSelectedGenre(index);
+                    setState(() {
+                      _currentChoiceIndex = selectedValue ? index : null;
+                    });
+                  },
+                  selectedColor: Theme.of(context).accentColor.withOpacity(0.3),
+                  labelStyle: TextStyle(
+                      color: _currentChoiceIndex == index
+                          ? Theme.of(context).accentColor
+                          : Colors.white60),
+                  label: Text(genres[index]),
+                  backgroundColor: Theme.of(context).secondaryHeaderColor),
             ),
           ),
         ),
         preferredSize: Size(MediaQuery.of(context).size.width, 50),
       ),
     );
-  }
-}
-
-class MovieSearch extends SearchDelegate<Movie> {
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.cancel),
-        onPressed: () {
-          query = '';
-        },
-      ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () => close(context, null),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return Container();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return Text(query);
   }
 }

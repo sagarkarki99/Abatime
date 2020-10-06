@@ -1,4 +1,6 @@
+import 'package:AbaTime/provider/genresProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,63 +11,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Widget _moviesDivision(Map<String, String> title, String genre) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 4.0,
+      ),
+      sliver: SliverToBoxAdapter(
+        child: MovieContainer(
+            key: PageStorageKey(title.keys.first), title: title, genre: genre),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final genre = Provider.of<GenreProvider>(context).selectedGenre;
+    print('sliver rebuild with $genre genre');
     return Scaffold(
       // extendBodyBehindAppBar: true,
       body: CustomScrollView(
         slivers: [
           CustomAppBar(),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 4.0,
-            ),
-            sliver: SliverToBoxAdapter(
-              child: MovieContainer(
-                key: PageStorageKey('NewMovies'),
-                title: "Recently Added",
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            sliver: SliverToBoxAdapter(
-              child: MovieContainer(
-                key: PageStorageKey('topRated'),
-                title: "Top Rated",
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            sliver: SliverToBoxAdapter(
-              child: MovieContainer(
-                key: PageStorageKey('Most Downloaded'),
-                title: "Most Downloads",
-              ),
-            ),
-          ),
-          // SliverPadding(
-          //   padding: const EdgeInsets.symmetric(vertical: 4.0),
-          //   sliver: SliverToBoxAdapter(
-          //     child: PreviewContainer(
-          //       key: PageStorageKey('priviews'),
-          //       title: "Netflix Originals",
-          //       lists: originals,
-          //       isNetflixOriginal: true,
-          //     ),
-          //   ),
-          // ),
-          // SliverPadding(
-          //   padding: const EdgeInsets.symmetric(vertical: 4.0),
-          //   sliver: SliverToBoxAdapter(
-          //     child: PreviewContainer(
-          //       key: PageStorageKey('priviews'),
-          //       title: "Trendings",
-          //       lists: trending,
-          //     ),
-          //   ),
-          // ),
+          _moviesDivision({'date_added': 'Recently Added'}, genre),
+          _moviesDivision({'rating': 'Top Rated'}, genre),
+          _moviesDivision({'download_count': 'Most Downloaded'}, genre),
+          _moviesDivision({'like_count': 'Top Favourites'}, genre),
         ],
       ),
     );

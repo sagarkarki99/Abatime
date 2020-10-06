@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:AbaTime/provider/allProviders.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -18,31 +22,55 @@ class _SearchScreenState extends State<SearchScreen> {
       ..play();
   }
 
+  Timer apiCallTimer;
+
   @override
   void initState() {
     super.initState();
-    startPlayer();
+    //startPlayer();
   }
 
   @override
   void dispose() {
-    _videoController.dispose();
+    //_videoController.dispose();
+    apiCallTimer.cancel();
     super.dispose();
+  }
+
+  _searchMovieWith(String query) {
+    if (apiCallTimer != null) {
+      apiCallTimer.cancel();
+    }
+    apiCallTimer = Timer(
+        Duration(seconds: 2),
+        () => Provider.of<MovieProvider>(context, listen: false)
+            .searchMovieApi(query));
   }
 
   @override
   Widget build(BuildContext context) {
+    final searchedMovies =
+        Provider.of<MovieProvider>(context).allSearchedMovies;
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          // color: Colors.green,
-          child: AspectRatio(
-            aspectRatio: _videoController.value.initialized
-                ? _videoController.value.aspectRatio
-                : 2.333,
-            child: VideoPlayer(_videoController),
-          ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
+        title: TextField(
+          autofocus: true,
+          autocorrect: true,
+          cursorColor: Colors.white,
+          decoration:
+              InputDecoration(border: InputBorder.none, hintText: 'Search'),
+          onChanged: (inputQuery) => _searchMovieWith(inputQuery),
         ),
+      ),
+      body: SafeArea(
+        child:
+            searchedMovies?.isEmpty ? Text('Loading...') : Text('Data Loaded'),
+        // Container(
+        //   // color: Colors.green,
+        //   height: 400,
+        //   child: VideoPlayer(_videoController),
+        // ),
       ),
     );
   }

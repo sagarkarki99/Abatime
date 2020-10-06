@@ -2,7 +2,6 @@ import 'package:AbaTime/model/movie.dart';
 import 'package:AbaTime/provider/moviesProvider.dart';
 import 'package:AbaTime/shimmers/movieListShimmer.dart';
 import 'package:AbaTime/shimmers/shimmerItem.dart';
-import 'package:AbaTime/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,9 +9,9 @@ import 'package:provider/provider.dart';
 import '../../routes.dart' as routes;
 
 class MovieContainer extends StatelessWidget {
-  final String title;
-
-  const MovieContainer({Key key, this.title}) : super(key: key);
+  final Map<String, String> title;
+  final String genre;
+  const MovieContainer({Key key, this.title, this.genre}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +21,14 @@ class MovieContainer extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
           child: Text(
-            title,
+            title.values.first,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
         SizedBox(height: 8.0),
         FutureBuilder(
           future: Provider.of<MovieProvider>(context, listen: false)
-              .fetchAllMovies(),
+              .fetchAllMovies(title.keys.first, genre),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return MovieListShimmer();
