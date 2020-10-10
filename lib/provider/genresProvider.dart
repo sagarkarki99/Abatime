@@ -12,6 +12,7 @@ class GenreProvider with ChangeNotifier {
     'Sci-fi',
     'Animation',
     'Fantasy',
+    'Mystery'
   ];
 
   var _selectedGenre = 'All';

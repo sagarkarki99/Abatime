@@ -5,6 +5,7 @@ import 'package:AbaTime/model/movieDetail.dart';
 import 'package:AbaTime/provider/moviesProvider.dart';
 import 'package:AbaTime/shimmers/movieDetailShimmer.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:AbaTime/widgets/detail_screen_widget/contentHeader.dart';
 import 'package:provider/provider.dart';
@@ -245,7 +246,9 @@ class DownloadContainer extends StatelessWidget {
       flex: 1,
       child: InkWell(
         splashColor: Theme.of(context).accentColor.withOpacity(0.5),
-        onTap: () {},
+        onTap: () {
+          _openTorrentApp(torrent.url);
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -266,5 +269,13 @@ class DownloadContainer extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _openTorrentApp(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
