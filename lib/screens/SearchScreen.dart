@@ -1,9 +1,14 @@
 import 'dart:async';
 
+import 'package:AbaTime/model/movie.dart';
 import 'package:AbaTime/provider/allProviders.dart';
+import 'package:AbaTime/provider/baseProvider.dart';
+import 'package:AbaTime/shimmers/verticalListShimmer.dart';
+import 'package:AbaTime/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
+
+import '../routes.dart' as routes;
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -11,28 +16,11 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  VideoPlayerController _videoController;
-  String sampleUrl =
-      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4';
-  String movieUrl =
-      'https://api.123movie.cc/jadeed.php?ep=60735-6x5&server_name=f5_series&t=60735';
-  startPlayer() {
-    _videoController = VideoPlayerController.network('$sampleUrl')
-      ..initialize().then((_) => setState(() {}))
-      ..play();
-  }
-
   Timer apiCallTimer;
-
-  @override
-  void initState() {
-    super.initState();
-    //startPlayer();
-  }
+  Future<List<Movie>> _searchedMoviesFuture;
 
   @override
   void dispose() {
-    //_videoController.dispose();
     apiCallTimer.cancel();
     super.dispose();
   }
@@ -41,16 +29,14 @@ class _SearchScreenState extends State<SearchScreen> {
     if (apiCallTimer != null) {
       apiCallTimer.cancel();
     }
-    apiCallTimer = Timer(
-        Duration(seconds: 2),
-        () => Provider.of<MovieProvider>(context, listen: false)
-            .searchMovieApi(query));
+    apiCallTimer = Timer(Duration(seconds: 1), () {
+      Provider.of<MovieProvider>(context, listen: false).searchMovieApi(query);
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final searchedMovies =
-        Provider.of<MovieProvider>(context).allSearchedMovies;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).secondaryHeaderColor,
@@ -61,16 +47,46 @@ class _SearchScreenState extends State<SearchScreen> {
           decoration:
               InputDecoration(border: InputBorder.none, hintText: 'Search'),
           onChanged: (inputQuery) => _searchMovieWith(inputQuery),
+          onSubmitted: (inputQuery) => _searchMovieWith(inputQuery),
         ),
       ),
       body: SafeArea(
         child:
-            searchedMovies?.isEmpty ? Text('Loading...') : Text('Data Loaded'),
-        // Container(
-        //   // color: Colors.green,
-        //   height: 400,
-        //   child: VideoPlayer(_videoController),
-        // ),
+            Consumer<MovieProvider>(builder: (context, movieProvider, child) {
+          print(movieProvider.state);
+          if (movieProvider.state == ViewState.LOADING) {
+            return VerticalListShimmer();
+          } else if (movieProvider.state == ViewState.WITHDATA) {
+            return _loadSearchedMoviesList(movieProvider.allSearchedMovies);
+          } else if (movieProvider.state == ViewState.WITHERROR) {
+            return CustomLabelWithIcon(
+              label: movieProvider.getMovieErrorMessage,
+              icon: Icons.file_copy_outlined,
+            );
+          } else {
+            return CustomLabelWithIcon(
+              icon: Icons.search,
+              label: 'Search with movies title, actor name ...',
+            );
+          }
+        }),
+      ),
+    );
+  }
+
+  Widget _loadSearchedMoviesList(List<Movie> searchedMovies) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView.builder(
+        itemCount: searchedMovies.length,
+        itemBuilder: (context, index) => CustomListItem(
+          title: searchedMovies[index].title,
+          subtitle: searchedMovies[index].year.toString(),
+          trailingItem: searchedMovies[index].rating.toString(),
+          imageUrl: searchedMovies[index].smallCoverImage,
+          onTap: () => Navigator.of(context).pushNamed(routes.movieDetailScreen,
+              arguments: searchedMovies[index].id),
+        ),
       ),
     );
   }

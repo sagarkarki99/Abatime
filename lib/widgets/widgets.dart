@@ -6,3 +6,5 @@ export 'detail_screen_widget/customChip.dart';
 export 'detail_screen_widget/ListWithImage.dart';
 export 'detail_screen_widget/iconWithInfo.dart';
 export 'customLoading.dart';
+export 'common/CustomListItem.dart';
+export 'common/CustomLabelWithIcon.dart';

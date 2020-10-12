@@ -7,13 +7,17 @@ import 'package:AbaTime/model/movieDetail.dart' as movieDetail;
 import 'package:AbaTime/model/movieResponse.dart';
 import 'package:AbaTime/repository/httpException.dart';
 import '../repository/localDatabase.dart' as localDb;
+import 'baseProvider.dart';
 
-class MovieProvider extends ChangeNotifier {
+class MovieProvider extends BaseProvider {
   List<Movie> movies = [];
-  List<Movie> _searchedMovies;
+  List<Movie> _searchedMovies = [];
+  String _moviesErrorMessage = 'Something went wrong!';
 
+//exposing to UI
   List<Movie> get allMovies => [...movies];
   List<Movie> get allSearchedMovies => [..._searchedMovies];
+  String get getMovieErrorMessage => _moviesErrorMessage;
 
   Future<void> fetchAllMovies(String sortName, String genre) async {
     try {
@@ -54,23 +58,28 @@ class MovieProvider extends ChangeNotifier {
   }
 
   Future<void> searchMovieApi(String query) async {
-    _searchedMovies = List();
-    notifyListeners();
+    setState(ViewState.LOADING);
     try {
       final responses = await ApiClient.getInstance().get(MOVIE_LIST, {
         'query_term': query,
       });
       MovieResponse movieResponse = MovieResponse.fromJson(responses);
-      print(responses);
+      if (movieResponse.data.movies != null) {
+        _searchedMovies = movieResponse.data.movies;
+        // notifyListeners();
+        setState(ViewState.WITHDATA);
+      } else {
+        setErrorMessage('No Result Found!');
+        setState(ViewState.WITHERROR);
+      }
 
-      _searchedMovies = [...movieResponse.data.movies];
-      notifyListeners();
+      print(_searchedMovies);
     } catch (error) {
-      throw HttpException(error.toString());
+      setErrorMessage(error.toString());
     }
   }
 
-  addToWatchList(movieDetail.Movie movie) async {
+  void addToWatchList(movieDetail.Movie movie) async {
     Map<String, dynamic> data = {
       'id': movie.id,
       'title': movie.title,
@@ -97,6 +106,11 @@ class MovieProvider extends ChangeNotifier {
         )
         .toList();
     return movies;
+  }
+
+  void setErrorMessage(String message) {
+    _moviesErrorMessage = message;
+    notifyListeners();
   }
 }
 

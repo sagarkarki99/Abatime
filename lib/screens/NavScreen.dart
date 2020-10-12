@@ -16,8 +16,11 @@ class _NavScreenState extends State<NavScreen> {
 
   List<Widget> _screens = [
     ChangeNotifierProvider(
-        create: (_) => GenreProvider(),
-        builder: (context, _) => HomeScreen(key: PageStorageKey('HomeScreen'))),
+      create: (_) => GenreProvider(),
+      builder: (context, _) => HomeScreen(
+        key: PageStorageKey('HomeScreen'),
+      ),
+    ),
     TvShowScreen(),
     SearchScreen(),
     WatchListScreen(),
@@ -42,7 +45,7 @@ class _NavScreenState extends State<NavScreen> {
                       title,
                       BottomNavigationBarItem(
                         icon: Icon(icon),
-                        title: Text(title),
+                        label: title,
                       ),
                     ),
                   )
