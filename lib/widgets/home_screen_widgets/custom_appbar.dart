@@ -1,7 +1,4 @@
-import 'package:AbaTime/assets.dart';
-import 'package:AbaTime/model/movie.dart';
-import 'package:AbaTime/provider/genresProvider.dart';
-import 'package:AbaTime/widgets/widgets.dart';
+import 'package:AbaTime/providers/genre_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

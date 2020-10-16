@@ -1,4 +1,4 @@
-import 'package:AbaTime/provider/allProviders.dart';
+import 'package:AbaTime/providers/all_providers.dart';
 import 'package:AbaTime/screens/screens.dart';
 import 'package:AbaTime/widgets/widgets.dart';
 import 'package:flutter/material.dart';

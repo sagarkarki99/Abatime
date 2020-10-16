@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:AbaTime/config/theme.dart';
-import 'package:AbaTime/provider/moviesProvider.dart';
-import 'package:AbaTime/screens/MovieDetailScreen.dart';
+import 'package:AbaTime/providers/all_providers.dart';
+import 'package:AbaTime/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

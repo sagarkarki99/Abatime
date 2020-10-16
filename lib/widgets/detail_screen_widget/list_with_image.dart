@@ -1,4 +1,4 @@
-import 'package:AbaTime/model/movieDetail.dart';
+import 'package:AbaTime/models/MovieDetail.dart';
 import 'package:flutter/material.dart';
 
 class CastContainer extends StatelessWidget {

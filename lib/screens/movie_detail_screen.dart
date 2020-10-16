@@ -1,13 +1,13 @@
 import 'dart:ui';
 
-import 'package:AbaTime/model/movieDetail.dart';
+import 'package:AbaTime/models/MovieDetail.dart';
 
-import 'package:AbaTime/provider/moviesProvider.dart';
-import 'package:AbaTime/shimmers/movieDetailShimmer.dart';
+import 'package:AbaTime/providers/movies_provider.dart';
+import 'package:AbaTime/shimmers/movie_detail_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:AbaTime/widgets/detail_screen_widget/contentHeader.dart';
+import 'package:AbaTime/widgets/detail_screen_widget/content_header.dart';
 import 'package:provider/provider.dart';
 import '../widgets/widgets.dart';
 

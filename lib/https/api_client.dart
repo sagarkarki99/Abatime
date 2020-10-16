@@ -1,4 +1,4 @@
-import 'package:AbaTime/repository/httpException.dart';
+import 'package:AbaTime/repository/http_exception.dart';
 import 'package:dio/dio.dart';
 
 class ApiClient {

@@ -1,7 +1,7 @@
-import 'package:AbaTime/model/movie.dart';
-import 'package:AbaTime/provider/moviesProvider.dart';
-import 'package:AbaTime/shimmers/movieListShimmer.dart';
-import 'package:AbaTime/shimmers/shimmerItem.dart';
+import 'package:AbaTime/models/Movie.dart';
+import 'package:AbaTime/providers/all_providers.dart';
+import 'package:AbaTime/shimmers/movie_list_shimmer.dart';
+import 'package:AbaTime/shimmers/shimmer_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

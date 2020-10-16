@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:AbaTime/model/movie.dart';
-import 'package:AbaTime/provider/allProviders.dart';
-import 'package:AbaTime/provider/baseProvider.dart';
-import 'package:AbaTime/shimmers/verticalListShimmer.dart';
+import 'package:AbaTime/models/Movie.dart';
+import 'package:AbaTime/providers/all_providers.dart';
+import 'package:AbaTime/providers/base_provider.dart';
+import 'package:AbaTime/shimmers/vertical_list_shimmer.dart';
 import 'package:AbaTime/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   Timer apiCallTimer;
-  Future<List<Movie>> _searchedMoviesFuture;
 
   @override
   void dispose() {

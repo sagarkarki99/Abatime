@@ -1,4 +1,4 @@
-import 'package:AbaTime/shimmers/baseShimmer.dart';
+import 'package:AbaTime/shimmers/base_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 

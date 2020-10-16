@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-
-import 'package:AbaTime/apiClient/apiClient.dart';
-import 'package:AbaTime/config/endpoints.dart';
-import 'package:AbaTime/model/movie.dart';
-import 'package:AbaTime/model/movieDetail.dart' as movieDetail;
-import 'package:AbaTime/model/movieResponse.dart';
-import 'package:AbaTime/repository/httpException.dart';
-import '../repository/localDatabase.dart' as localDb;
-import 'baseProvider.dart';
+import 'package:AbaTime/https/api_client.dart';
+import 'package:AbaTime/config/end_points.dart';
+import 'package:AbaTime/models/Movie.dart';
+import 'package:AbaTime/models/MovieDetail.dart' as movieDetail;
+import 'package:AbaTime/models/MovieResponse.dart';
+import 'package:AbaTime/repository/http_exception.dart';
+import '../repository/local_database.dart' as localDb;
+import 'base_provider.dart';
 
 class MovieProvider extends BaseProvider {
   List<Movie> movies = [];
