@@ -8,7 +8,7 @@ import 'package:AbaTime/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../routes.dart' as routes;
+import '../routes.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -59,7 +59,7 @@ class _SearchScreenState extends State<SearchScreen> {
             return _loadSearchedMoviesList(movieProvider.allSearchedMovies);
           } else if (movieProvider.state == ViewState.WITHERROR) {
             return CustomLabelWithIcon(
-              label: movieProvider.getMovieErrorMessage,
+              label: movieProvider.uiErrorMessage,
               icon: Icons.file_copy_outlined,
             );
           } else {
@@ -83,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
           subtitle: searchedMovies[index].year.toString(),
           trailingItem: searchedMovies[index].rating.toString(),
           imageUrl: searchedMovies[index].smallCoverImage,
-          onTap: () => Navigator.of(context).pushNamed(routes.movieDetailScreen,
+          onTap: () => Navigator.of(context).pushNamed(Routes.movieDetailScreen,
               arguments: searchedMovies[index].id),
         ),
       ),

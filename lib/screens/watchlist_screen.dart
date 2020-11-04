@@ -2,7 +2,7 @@ import 'package:AbaTime/providers/movies_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/widgets.dart';
-import '../routes.dart' as routes;
+import '../routes.dart';
 
 class WatchListScreen extends StatelessWidget {
   @override
@@ -32,7 +32,7 @@ class WatchListScreen extends StatelessWidget {
                     imageUrl: snapshot.data[index].imageUrl,
                     trailingItem: snapshot.data[index].rating.toString(),
                     onTap: () => Navigator.of(context).pushNamed(
-                        routes.movieDetailScreen,
+                        Routes.movieDetailScreen,
                         arguments: snapshot.data[index].id),
                   ),
                 ),

@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../routes.dart' as routes;
+import '../../routes.dart';
 
 class MovieContainer extends StatelessWidget {
   final Map<String, String> title;
@@ -33,7 +33,7 @@ class MovieContainer extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return MovieListShimmer();
             } else if (snapshot.error != null) {
-              return Text('No Movies Available');
+              return Text('${snapshot.error.toString()}');
             } else {
               return MovieListContainer();
             }
@@ -73,6 +73,6 @@ class MovieListContainer extends StatelessWidget {
 
   navigateToNextScreen(BuildContext context, Movie movie) {
     Navigator.of(context)
-        .pushNamed(routes.movieDetailScreen, arguments: movie.id);
+        .pushNamed(Routes.movieDetailScreen, arguments: movie.id);
   }
 }

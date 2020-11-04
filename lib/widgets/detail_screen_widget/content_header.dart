@@ -18,7 +18,7 @@ class ContentHeader extends StatelessWidget {
         CarouselSlider(
           options: CarouselOptions(
             autoPlay: true,
-            viewportFraction: 1,
+            viewportFraction: 2,
             height: 400.0,
             autoPlayInterval: Duration(seconds: 4),
           ),

@@ -12,25 +12,26 @@ import 'package:provider/provider.dart';
 import '../widgets/widgets.dart';
 
 class MovieDetailScreen extends StatelessWidget {
-  const MovieDetailScreen({Key key}) : super(key: key);
+  final String movieId;
+  const MovieDetailScreen(this.movieId, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final movieId = ModalRoute.of(context).settings.arguments as int;
-
+    // final movieId = ModalRoute.of(context).settings.arguments as int;
+    print(movieId);
     return Scaffold(
       body: FutureBuilder(
         future: Provider.of<MovieProvider>(context, listen: false)
-            .fetchMovieDetail(movieId.toString()),
+            .fetchMovieDetailWith(movieId.toString()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return MovieDetailShimmer();
-          } else if (!snapshot.hasData) {
+          } else if (snapshot.error != null) {
             return Center(
               child: Text('Failed to load!'),
             );
           } else {
-            return MovieDetailWidget(movie: snapshot.data);
+            return MovieDetailWidget();
           }
         },
       ),
@@ -39,11 +40,7 @@ class MovieDetailScreen extends StatelessWidget {
 }
 
 class MovieDetailWidget extends StatelessWidget {
-  final Movie movie;
-
-  MovieDetailWidget({Key key, this.movie}) : super(key: key);
-
-  playTrailer(BuildContext context) {
+  playTrailer(BuildContext context, Movie movie) {
     showDialog(
       context: context,
       child: Dialog(
@@ -65,12 +62,12 @@ class MovieDetailWidget extends StatelessWidget {
     );
   }
 
-  Widget _movieInfoContainer(BuildContext context) {
+  Widget _movieInfoContainer(BuildContext context, Movie movie) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         InkWell(
-          onTap: () => playTrailer(context),
+          onTap: () => playTrailer(context, movie),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4.0),
@@ -142,7 +139,8 @@ class MovieDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final scaffoldContext = Scaffold.of(context);
     final movieProvider = Provider.of<MovieProvider>(context);
-
+    final movie = movieProvider.getMovieDetail;
+    print(movie);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +151,7 @@ class MovieDetailWidget extends StatelessWidget {
             sc3: movie.mediumScreenshotImage3,
             child: Container(
               width: MediaQuery.of(context).size.width,
-              child: _movieInfoContainer(context),
+              child: _movieInfoContainer(context, movie),
             ),
           ),
           Padding(
@@ -197,21 +195,26 @@ class MovieDetailWidget extends StatelessWidget {
             direction: Axis.horizontal,
             children: [
               ...movie.genres
-                  .map((movie) => CustomChip(
-                        label: movie.toString(),
-                        color: Theme.of(context).accentColor,
-                      ))
+                  .map(
+                    (movie) => CustomChip(
+                      label: movie.toString(),
+                      color: Theme.of(context).accentColor,
+                    ),
+                  )
                   .toList(),
             ],
           ),
-          Text(
-            movie.descriptionFull,
-            textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(color: Colors.white60),
-            strutStyle: StrutStyle(leading: 0.5),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              movie.descriptionFull,
+              textAlign: TextAlign.left,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(color: Colors.white60),
+              strutStyle: StrutStyle(leading: 0.5),
+            ),
           ),
           movie.cast == null ? SizedBox() : CastContainer(casts: movie.cast),
         ],

@@ -3,60 +3,51 @@ import 'package:AbaTime/config/end_points.dart';
 import 'package:AbaTime/models/Movie.dart';
 import 'package:AbaTime/models/MovieDetail.dart' as movieDetail;
 import 'package:AbaTime/models/MovieResponse.dart';
-import 'package:AbaTime/repository/http_exception.dart';
+import 'package:AbaTime/repository/app_error.dart';
+import 'package:AbaTime/repository/movie_repository.dart';
+import 'package:dartz/dartz.dart';
 import '../repository/local_database.dart' as localDb;
 import 'base_provider.dart';
 
 class MovieProvider extends BaseProvider {
-  List<Movie> movies = [];
+  MovieRepository _movieRepository = MovieRepository();
+  movieDetail.Movie _detailMovie;
+  List<Movie> _movies = [];
   List<Movie> _searchedMovies = [];
-  String _moviesErrorMessage = 'Something went wrong!';
 
 //exposing to UI
-  List<Movie> get allMovies => [...movies];
+  List<Movie> get allMovies => [..._movies];
   List<Movie> get allSearchedMovies => [..._searchedMovies];
-  String get getMovieErrorMessage => _moviesErrorMessage;
+  movieDetail.Movie get getMovieDetail => _detailMovie;
 
   Future<void> fetchAllMovies(String sortName, String genre) async {
-    try {
-      final data = await ApiClient.getInstance().get(
-        MOVIE_LIST,
-        genre == 'All'
-            ? {
-                'limit': 20,
-                'sort_by': sortName,
-              }
-            : {
-                'limit': 20,
-                'sort_by': sortName,
-                'genre': genre,
-              },
-      );
-      MovieResponse movieResponse = MovieResponse.fromJson(data);
-      movies = movieResponse.data.movies;
+    Either<AppError, List<Movie>> eitherResult =
+        await _movieRepository.getAllMovies(sortName, genre);
+    eitherResult.fold((AppError error) {
+      print(error.toString());
+      setUiState(ViewState.WITHERROR);
+    }, (List<Movie> movies) {
+      _movies = movies;
       notifyListeners();
-    } catch (error) {
-      throw HttpException(error.toString());
-    }
+    });
   }
 
-  Future<movieDetail.Movie> fetchMovieDetail(String id) async {
-    try {
-      final response = await ApiClient.getInstance().get(MOVIE_DETAIL, {
-        'movie_id': id,
-        'with_images': true,
-        'with_cast': true,
-      });
-      movieDetail.MovieDetail detail =
-          movieDetail.MovieDetail.fromJson(response);
-      return detail.data.movie;
-    } catch (error) {
-      throw HttpException(error.toString());
-    }
+  Future<void> fetchMovieDetailWith(String id) async {
+    Either<AppError, movieDetail.Movie> eitherResult =
+        await _movieRepository.getMovieDetailWith(id);
+
+    eitherResult.fold((AppError appError) {
+      setErrorMessage(appError.toString());
+    }, (movieDetail.Movie movie) {
+      _detailMovie = movie;
+
+      notifyListeners();
+      // setUiState(ViewState.WITHDATA);
+    });
   }
 
   Future<void> searchMovieApi(String query) async {
-    setState(ViewState.LOADING);
+    setUiState(ViewState.LOADING);
     try {
       final responses = await ApiClient.getInstance().get(MOVIE_LIST, {
         'query_term': query,
@@ -65,10 +56,10 @@ class MovieProvider extends BaseProvider {
       if (movieResponse.data.movies != null) {
         _searchedMovies = movieResponse.data.movies;
         // notifyListeners();
-        setState(ViewState.WITHDATA);
+        setUiState(ViewState.WITHDATA);
       } else {
         setErrorMessage('No Result Found!');
-        setState(ViewState.WITHERROR);
+        setUiState(ViewState.WITHERROR);
       }
 
       print(_searchedMovies);
@@ -104,11 +95,6 @@ class MovieProvider extends BaseProvider {
         )
         .toList();
     return movies;
-  }
-
-  void setErrorMessage(String message) {
-    _moviesErrorMessage = message;
-    notifyListeners();
   }
 }
 

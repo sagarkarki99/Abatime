@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/screens.dart';
-import 'routes.dart' as routes;
+import 'routes.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,10 +27,7 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: MyTheme.customTheme(),
               home: NavScreen(),
-              routes: {
-                routes.homeScreen: (_) => HomeScreen(),
-                routes.movieDetailScreen: (_) => MovieDetailScreen()
-              },
+              onGenerateRoute: Routes.onGenerateRoute,
             ),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:AbaTime/repository/http_exception.dart';
 import 'package:dio/dio.dart';
 
 class ApiClient {
@@ -15,14 +14,29 @@ class ApiClient {
       );
       return response.data;
     } on DioError catch (error) {
-      switch (error.type) {
-        case DioErrorType.RESPONSE:
-          throw HttpException(error.response.data);
-        case DioErrorType.SEND_TIMEOUT:
-          throw HttpException("Connection Time out!");
-        default:
-          throw HttpException("Error! Something went wrong!");
-      }
+      throw HttpException.dioError(error);
+    }
+  }
+}
+
+class HttpException implements Exception {
+  String errorMessage;
+
+  @override
+  String toString() {
+    return errorMessage;
+  }
+
+  HttpException.dioError(DioError error) {
+    switch (error.type) {
+      case DioErrorType.RESPONSE:
+        errorMessage = error.response.data;
+        break;
+      case DioErrorType.SEND_TIMEOUT:
+        errorMessage = "Connection Time out!";
+        break;
+      default:
+        errorMessage = "Error! Something went wrong!";
     }
   }
 }
