@@ -4,7 +4,7 @@ import 'package:AbaTime/models/Movie.dart';
 import 'package:AbaTime/models/MovieResponse.dart';
 import 'package:AbaTime/models/MovieDetail.dart' as movieDetail;
 import 'package:dartz/dartz.dart';
-
+import '../repository/local_database.dart' as localDb;
 import 'app_error.dart';
 
 class MovieRepository {
@@ -46,4 +46,60 @@ class MovieRepository {
       return Left(AppError(error.toString()));
     }
   }
+
+  Future<Either<AppError, List<Movie>>> getSearchedMoviesWith(
+      String query) async {
+    try {
+      final responses = await ApiClient.getInstance().get(MOVIE_LIST, {
+        'query_term': query,
+      });
+      MovieResponse movieResponse = MovieResponse.fromJson(responses);
+      if (movieResponse.data.movies != null) {
+        return Right(movieResponse.data.movies);
+      } else {
+        return Left(AppError('No Result Found, Try Something Different!'));
+      }
+    } catch (error) {
+      return Left(AppError(error.toString()));
+    }
+  }
+
+  Future<void> addToWatchList(movieDetail.Movie movie) async {
+    Map<String, dynamic> data = {
+      'id': movie.id,
+      'title': movie.title,
+      'year': movie.year,
+      'rating': movie.rating,
+      'imageUrl': movie.mediumCoverImage
+    };
+    await localDb.insert(tableName: 'movies_table', data: data);
+  }
+
+  Future<List<DbMovie>> getAllWatchList() async {
+    final List<Map<String, dynamic>> maps =
+        await localDb.retrieve(tableName: 'movies_table');
+
+    List<DbMovie> dbMovies = maps
+        .map(
+          (movie) => DbMovie(
+            id: movie['id'],
+            title: movie['title'],
+            year: movie['year'],
+            rating: movie['rating'],
+            imageUrl: movie['imageUrl'],
+          ),
+        )
+        .toList();
+    return dbMovies;
+  }
+}
+
+class DbMovie {
+  final id;
+  final title;
+  final year;
+  final rating;
+  final imageUrl;
+
+  DbMovie({this.id, this.title, this.year, this.rating, this.imageUrl});
 }

@@ -1,12 +1,9 @@
-import 'package:AbaTime/https/api_client.dart';
-import 'package:AbaTime/config/end_points.dart';
 import 'package:AbaTime/models/Movie.dart';
 import 'package:AbaTime/models/MovieDetail.dart' as movieDetail;
-import 'package:AbaTime/models/MovieResponse.dart';
 import 'package:AbaTime/repository/app_error.dart';
 import 'package:AbaTime/repository/movie_repository.dart';
 import 'package:dartz/dartz.dart';
-import '../repository/local_database.dart' as localDb;
+
 import 'base_provider.dart';
 
 class MovieProvider extends BaseProvider {
@@ -38,72 +35,32 @@ class MovieProvider extends BaseProvider {
 
     eitherResult.fold((AppError appError) {
       setErrorMessage(appError.toString());
+      setUiState(ViewState.WITHERROR);
     }, (movieDetail.Movie movie) {
       _detailMovie = movie;
-
-      notifyListeners();
+      setUiState(ViewState.WITHDATA);
       // setUiState(ViewState.WITHDATA);
     });
   }
 
   Future<void> searchMovieApi(String query) async {
     setUiState(ViewState.LOADING);
-    try {
-      final responses = await ApiClient.getInstance().get(MOVIE_LIST, {
-        'query_term': query,
-      });
-      MovieResponse movieResponse = MovieResponse.fromJson(responses);
-      if (movieResponse.data.movies != null) {
-        _searchedMovies = movieResponse.data.movies;
-        // notifyListeners();
-        setUiState(ViewState.WITHDATA);
-      } else {
-        setErrorMessage('No Result Found!');
-        setUiState(ViewState.WITHERROR);
-      }
-
-      print(_searchedMovies);
-    } catch (error) {
-      setErrorMessage(error.toString());
-    }
+    Either<AppError, List<Movie>> eitherResult =
+        await _movieRepository.getSearchedMoviesWith(query);
+    eitherResult.fold((appError) {
+      setErrorMessage(appError.toString());
+      setUiState(ViewState.WITHERROR);
+    }, (movies) {
+      _searchedMovies = movies;
+      setUiState(ViewState.WITHDATA);
+    });
   }
 
-  void addToWatchList(movieDetail.Movie movie) async {
-    Map<String, dynamic> data = {
-      'id': movie.id,
-      'title': movie.title,
-      'year': movie.year,
-      'rating': movie.rating,
-      'imageUrl': movie.mediumCoverImage
-    };
-    await localDb.insert(tableName: 'movies_table', data: data);
+  Future<void> addToWatchList(movieDetail.Movie movie) async {
+    await _movieRepository.addToWatchList(movie);
   }
 
   Future<List<DbMovie>> getAllWatchList() async {
-    final List<Map<String, dynamic>> maps =
-        await localDb.retrieve(tableName: 'movies_table');
-
-    List<DbMovie> movies = maps
-        .map(
-          (movie) => DbMovie(
-            id: movie['id'],
-            title: movie['title'],
-            year: movie['year'],
-            rating: movie['rating'],
-            imageUrl: movie['imageUrl'],
-          ),
-        )
-        .toList();
-    return movies;
+    return await _movieRepository.getAllWatchList();
   }
-}
-
-class DbMovie {
-  final id;
-  final title;
-  final year;
-  final rating;
-  final imageUrl;
-
-  DbMovie({this.id, this.title, this.year, this.rating, this.imageUrl});
 }

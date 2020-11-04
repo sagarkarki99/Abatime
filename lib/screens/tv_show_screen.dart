@@ -1,8 +1,6 @@
-import 'package:AbaTime/shimmers/base_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class TvShowScreen extends StatefulWidget {
   @override
@@ -19,6 +17,12 @@ class _TvShowScreenState extends State<TvShowScreen> {
     _controller = VideoPlayerController.network(_videoUrl);
     _controller.initialize();
     _controller.play();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
