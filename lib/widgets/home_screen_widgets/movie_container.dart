@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
+import '../widgets.dart';
 
 class MovieContainer extends StatelessWidget {
   final Map<String, String> title;
@@ -15,6 +16,7 @@ class MovieContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final movieProvider = Provider.of<MovieProvider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -22,20 +24,22 @@ class MovieContainer extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
           child: Text(
             title.values.first,
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(letterSpacing: 1.5, color: Colors.white70),
           ),
         ),
-        SizedBox(height: 8.0),
+        const SizedBox(height: 8.0),
         FutureBuilder(
-          future: Provider.of<MovieProvider>(context, listen: false)
-              .fetchAllMovies(title.keys.first, genre),
+          future: movieProvider.fetchMovies(title.keys.first, genre),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return MovieListShimmer();
             } else if (snapshot.error != null) {
               return Text('${snapshot.error.toString()}');
             } else {
-              return MovieListContainer();
+              return MovieListContainer(sortName: title.keys.first);
             }
           },
         ),
@@ -45,27 +49,23 @@ class MovieContainer extends StatelessWidget {
 }
 
 class MovieListContainer extends StatelessWidget {
+  final String sortName;
+
+  const MovieListContainer({Key key, @required this.sortName})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final movieProvider = Provider.of<MovieProvider>(context, listen: false);
-    final movies = movieProvider.allMovies;
+    final movies = movieProvider.moviesMap[sortName];
     return Container(
-      height: 200,
+      height: 220,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: movies.length,
         itemBuilder: (_, index) => InkWell(
           onTap: () => navigateToNextScreen(context, movies[index]),
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(8.0, 2.0, 0.0, 4.0),
-            child: CachedNetworkImage(
-              imageUrl: movies[index].mediumCoverImage ??
-                  movies[index].largeCoverImage,
-              placeholder: (_, url) => ShimmerItem(),
-              fadeInDuration: Duration(milliseconds: 500),
-              fadeInCurve: Curves.bounceInOut,
-            ),
-          ),
+          child: MovieItem(movie: movies[index]),
         ),
       ),
     );
@@ -74,5 +74,49 @@ class MovieListContainer extends StatelessWidget {
   navigateToNextScreen(BuildContext context, Movie movie) {
     Navigator.of(context)
         .pushNamed(Routes.movieDetailScreen, arguments: movie.id);
+  }
+}
+
+class MovieItem extends StatelessWidget {
+  const MovieItem({
+    Key key,
+    @required this.movie,
+  }) : super(key: key);
+
+  final Movie movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Expanded(
+          flex: 8,
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(8.0, 2.0, 0.0, 4.0),
+            child: CachedNetworkImage(
+              imageUrl: movie.mediumCoverImage ?? movie.largeCoverImage,
+              placeholder: (_, url) => ShimmerItem(),
+              fadeInDuration: Duration(milliseconds: 500),
+              fadeInCurve: Curves.bounceInOut,
+            ),
+          ),
+        ),
+        Expanded(
+            flex: 1,
+            child: Row(
+              children: [
+                Text(
+                  movie.rating.toString(),
+                ),
+                Icon(
+                  Icons.star,
+                  size: 18,
+                  color: Theme.of(context).accentColor,
+                ),
+              ],
+            )),
+      ],
+    );
   }
 }

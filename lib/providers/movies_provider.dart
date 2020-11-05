@@ -11,11 +11,29 @@ class MovieProvider extends BaseProvider {
   movieDetail.Movie _detailMovie;
   List<Movie> _movies = [];
   List<Movie> _searchedMovies = [];
+  Map<String, List<Movie>> _allMovies = {};
 
 //exposing to UI
   List<Movie> get allMovies => [..._movies];
   List<Movie> get allSearchedMovies => [..._searchedMovies];
   movieDetail.Movie get getMovieDetail => _detailMovie;
+  Map<String, List<Movie>> get moviesMap => {..._allMovies};
+
+  Future<void> fetchMovies(String sortName, String genre) async {
+    // setUiState(ViewState.LOADING);
+
+    Either<AppError, List<Movie>> eitherResult =
+        await _movieRepository.getAllMovies(sortName, genre);
+    eitherResult.fold((AppError error) {
+      setErrorMessage(error.toString());
+      setUiState(ViewState.WITHERROR);
+    }, (List<Movie> movies) {
+      _movies = movies;
+      _allMovies[sortName] = movies;
+
+      setUiState(ViewState.WITHDATA);
+    });
+  }
 
   Future<void> fetchAllMovies(String sortName, String genre) async {
     Either<AppError, List<Movie>> eitherResult =
@@ -61,6 +79,10 @@ class MovieProvider extends BaseProvider {
   }
 
   Future<List<DbMovie>> getAllWatchList() async {
-    return await _movieRepository.getAllWatchList();
+    List<DbMovie> watchListMovies = await _movieRepository.getAllWatchList();
+    if (watchListMovies.isEmpty) {
+      return null;
+    }
+    return watchListMovies;
   }
 }

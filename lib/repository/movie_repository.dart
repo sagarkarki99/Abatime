@@ -17,11 +17,13 @@ class MovieRepository {
             ? {
                 'limit': 20,
                 'sort_by': sortName,
+                'order_by': 'des',
               }
             : {
                 'limit': 20,
                 'sort_by': sortName,
                 'genre': genre,
+                'order_by': 'dec'
               },
       );
       MovieResponse movieResponse = MovieResponse.fromJson(data);

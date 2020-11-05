@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 class ApiClient {
   static ApiClient instance;
   static const _baseUrl = 'https://yts.mx/api/v2';
-  static ApiClient getInstance() => instance ?? ApiClient();
+  static ApiClient getInstance() => ApiClient();
 
   get(String endpoint, Map<String, dynamic> queryParam) async {
     final url = _baseUrl + endpoint;
