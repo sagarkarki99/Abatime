@@ -13,6 +13,7 @@ class NavScreen extends StatefulWidget {
 
 class _NavScreenState extends State<NavScreen> {
   var _currentIndex = 0;
+  bool isPop = false;
 
   List<Widget> _screens = [
     ChangeNotifierProvider(
@@ -35,32 +36,43 @@ class _NavScreenState extends State<NavScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: ResponsiveWidget.isMobile(context)
-          ? BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              items: _icons
-                  .map(
-                    (title, icon) => MapEntry(
-                      title,
-                      BottomNavigationBarItem(
-                        icon: Icon(icon),
-                        label: title,
+    return WillPopScope(
+      onWillPop: () async {
+        if (_currentIndex != 0) {
+          setState(() {
+            _currentIndex = 0;
+          });
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        bottomNavigationBar: ResponsiveWidget.isMobile(context)
+            ? BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                items: _icons
+                    .map(
+                      (title, icon) => MapEntry(
+                        title,
+                        BottomNavigationBarItem(
+                          icon: Icon(icon),
+                          label: title,
+                        ),
                       ),
-                    ),
-                  )
-                  .values
-                  .toList(),
-              backgroundColor: Colors.black,
-              currentIndex: _currentIndex,
-              selectedItemColor: Colors.white,
-              selectedFontSize: 14,
-              unselectedItemColor: Colors.grey,
-              unselectedFontSize: 11,
-              onTap: (value) => setState(() => _currentIndex = value),
-            )
-          : null,
-      body: _screens[_currentIndex],
+                    )
+                    .values
+                    .toList(),
+                backgroundColor: Colors.black,
+                currentIndex: _currentIndex,
+                selectedItemColor: Colors.white,
+                selectedFontSize: 14,
+                unselectedItemColor: Colors.grey,
+                unselectedFontSize: 11,
+                onTap: (value) => setState(() => _currentIndex = value),
+              )
+            : null,
+        body: _screens[_currentIndex],
+      ),
     );
   }
 }

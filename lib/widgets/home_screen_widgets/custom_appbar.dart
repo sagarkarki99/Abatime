@@ -2,17 +2,9 @@ import 'package:AbaTime/providers/genre_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CustomAppBar extends StatefulWidget {
+class CustomAppBar extends StatelessWidget {
   CustomAppBar({Key key}) : super(key: key);
 
-  @override
-  _CustomAppBarState createState() => _CustomAppBarState();
-}
-
-class _CustomAppBarState extends State<CustomAppBar> {
-  var _currentChoiceIndex = 0;
-
-  @override
   Widget build(BuildContext context) {
     final genreProvider = Provider.of<GenreProvider>(context, listen: false);
     final genres = genreProvider.allGenres;
@@ -39,16 +31,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
             itemBuilder: (context, index) => Padding(
               padding: const EdgeInsets.symmetric(horizontal: 6.0),
               child: ChoiceChip(
-                  selected: _currentChoiceIndex == index,
+                  selected: genreProvider.selectedGenreIndex == index,
                   onSelected: (selectedValue) {
                     genreProvider.setSelectedGenre(index);
-                    setState(() {
-                      _currentChoiceIndex = selectedValue ? index : null;
-                    });
                   },
                   selectedColor: Theme.of(context).accentColor.withOpacity(0.3),
                   labelStyle: TextStyle(
-                      color: _currentChoiceIndex == index
+                      color: genreProvider.selectedGenreIndex == index
                           ? Theme.of(context).accentColor
                           : Colors.white60),
                   label: Text(genres[index]),

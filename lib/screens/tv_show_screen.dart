@@ -11,6 +11,8 @@ class _TvShowScreenState extends State<TvShowScreen> {
   VideoPlayerController _controller;
   final String _videoUrl =
       'https://vidcloud9.com/goto.php?url=aHR0cHM6LyAdeqwrwedffryretgsdFrsftrsvfsfsr9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2lkeWxsaWMtcmV0dXJuLTI5MjAxOS8xRUJNNDRCNThNRDcvMjJtXzE2MDQzNzM1OTUzMzE1MDYubXA0';
+  // final String _videoUrl =
+  //     'https://ytsembed.xyz/stream/8619B57A3F39F1B49A1A698EA5400A883928C0A2';
   @override
   void initState() {
     super.initState();
@@ -32,17 +34,18 @@ class _TvShowScreenState extends State<TvShowScreen> {
         children: [
           Container(
             child: Shimmer.fromColors(
-                baseColor: Colors.white70,
-                period: Duration(seconds: 2),
-                highlightColor:
-                    Theme.of(context).secondaryHeaderColor.withOpacity(0.6),
-                child: Text(
-                  'Coming Soon',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline5
-                      .copyWith(color: Colors.white, letterSpacing: 2),
-                )),
+              baseColor: Colors.white70,
+              period: Duration(seconds: 2),
+              highlightColor:
+                  Theme.of(context).secondaryHeaderColor.withOpacity(0.6),
+              child: Text(
+                'Coming Soon',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    .copyWith(color: Colors.white, letterSpacing: 2),
+              ),
+            ),
           ),
           Container(
             height: 400,

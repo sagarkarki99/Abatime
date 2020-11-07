@@ -20,7 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
-    apiCallTimer.cancel();
+    apiCallTimer?.cancel();
     super.dispose();
   }
 

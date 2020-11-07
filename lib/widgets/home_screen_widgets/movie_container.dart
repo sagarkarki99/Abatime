@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
-import '../widgets.dart';
 
 class MovieContainer extends StatelessWidget {
   final Map<String, String> title;
@@ -16,6 +15,7 @@ class MovieContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Movie Container build with $genre');
     final movieProvider = Provider.of<MovieProvider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +93,7 @@ class MovieItem extends StatelessWidget {
         Expanded(
           flex: 8,
           child: Container(
-            margin: const EdgeInsets.fromLTRB(8.0, 2.0, 0.0, 4.0),
+            margin: const EdgeInsets.fromLTRB(8.0, 2.0, 0.0, 0.0),
             child: CachedNetworkImage(
               imageUrl: movie.mediumCoverImage ?? movie.largeCoverImage,
               placeholder: (_, url) => ShimmerItem(),
