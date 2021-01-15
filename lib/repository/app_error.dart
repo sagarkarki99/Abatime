@@ -1,6 +1,6 @@
-class HttpException implements Exception {
+class AppError {
   String errorMessage;
-  HttpException(this.errorMessage);
+  AppError(this.errorMessage);
 
   @override
   String toString() {
