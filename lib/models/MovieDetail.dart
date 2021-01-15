@@ -54,7 +54,7 @@ class Movie {
   String titleLong;
   String slug;
   int year;
-  double rating;
+  num rating;
   int runtime;
   List<String> genres;
   int downloadCount;

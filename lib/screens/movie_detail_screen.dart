@@ -51,6 +51,7 @@ class MovieDetailWidget extends StatelessWidget {
               flags: YoutubePlayerFlags(
                   autoPlay: true, mute: false, forceHD: true),
             ),
+            thumbnail: Image.network(movie.mediumCoverImage),
             showVideoProgressIndicator: true,
             progressIndicatorColor: Theme.of(context).accentColor,
           ),
