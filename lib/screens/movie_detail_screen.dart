@@ -1,15 +1,19 @@
 import 'dart:ui';
 
-import 'package:AbaTime/models/MovieDetail.dart';
+import 'package:AbaTime/config/utils/torrent_manager.dart';
 
-import 'package:AbaTime/providers/movies_provider.dart';
-import 'package:AbaTime/shimmers/movie_detail_shimmer.dart';
+import '../models/MovieDetail.dart';
+
+import '../providers/movies_provider.dart';
+import '../shimmers/movie_detail_shimmer.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url;
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:AbaTime/widgets/detail_screen_widget/content_header.dart';
+import '../widgets/detail_screen_widget/content_header.dart';
 import 'package:provider/provider.dart';
 import '../widgets/widgets.dart';
+import 'package:device_apps/device_apps.dart';
+import 'package:android_intent/android_intent.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final String movieId;
@@ -17,8 +21,6 @@ class MovieDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final movieId = ModalRoute.of(context).settings.arguments as int;
-    print(movieId);
     return Scaffold(
       body: FutureBuilder(
         future: Provider.of<MovieProvider>(context, listen: false)
@@ -116,16 +118,21 @@ class MovieDetailWidget extends StatelessWidget {
                 icon: Icons.favorite,
               ),
               SizedBox(height: 16.0),
-              RaisedButton.icon(
-                icon: Icon(Icons.file_download),
-                label: Text('Download'),
-                color: Theme.of(context).accentColor,
+              TextButton.icon(
+                icon: Icon(
+                  Icons.file_download,
+                  color: Theme.of(context).accentColor,
+                ),
+                label: Text(
+                  'Get Torrent',
+                  style: TextStyle(color: Theme.of(context).accentColor),
+                ),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
                     backgroundColor: Theme.of(context).secondaryHeaderColor,
                     elevation: 8,
-                    builder: (context) => DownloadContainer(movie.torrents),
+                    builder: (context) => DownloadContainer(movie),
                   );
                 },
               )
@@ -224,24 +231,31 @@ class MovieDetailWidget extends StatelessWidget {
   }
 }
 
-class DownloadContainer extends StatelessWidget {
-  final List<Torrents> torrents;
-  DownloadContainer(this.torrents);
+class DownloadContainer extends StatefulWidget {
+  final Movie movie;
+  DownloadContainer(this.movie);
 
+  @override
+  _DownloadContainerState createState() => _DownloadContainerState();
+}
+
+class _DownloadContainerState extends State<DownloadContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
       height: 200,
-      child: Row(
-        children: [
-          _downloadSide(context, torrents[0]),
-          VerticalDivider(
-            color: Colors.red,
-          ),
-          _downloadSide(context, torrents[1]),
-        ],
-      ),
+      child: widget.movie.torrents.length == 1
+          ? _downloadSide(context, widget.movie.torrents[0])
+          : Row(
+              children: [
+                _downloadSide(context, widget.movie.torrents[0]),
+                VerticalDivider(
+                  color: Colors.red,
+                ),
+                _downloadSide(context, widget.movie.torrents[1]),
+              ],
+            ),
     );
   }
 
@@ -251,7 +265,8 @@ class DownloadContainer extends StatelessWidget {
       child: InkWell(
         splashColor: Theme.of(context).accentColor.withOpacity(0.5),
         onTap: () {
-          _openTorrentApp(torrent.url);
+          Navigator.pop(context);
+          _openTorrentApp(torrent, context);
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -275,11 +290,17 @@ class DownloadContainer extends StatelessWidget {
     );
   }
 
-  void _openTorrentApp(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  void _openTorrentApp(Torrents torrent, BuildContext context) async {
+    if (await TorrentManager.isTorrentClientAvailable()) {
+      AndroidIntent intent = AndroidIntent(
+        action: 'action_view',
+        package: TorrentManager.getAvailableClient(),
+        data: TorrentManager.getMagnetUrl(torrent.hash, torrent.url),
+      );
+      await intent.launch();
     } else {
-      throw 'Could not launch $url';
+      await url.launch(
+          'https://play.google.com/store/apps/details?id=com.bittorrent.client&hl=en&gl=US');
     }
   }
 }
