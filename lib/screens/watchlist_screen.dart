@@ -5,35 +5,77 @@ import '../widgets/widgets.dart';
 import '../routes.dart';
 
 class WatchListScreen extends StatelessWidget {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<MovieProvider>(context);
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).secondaryHeaderColor,
-        title: Text('MY List'),
+        title: Text('Watch List'),
         centerTitle: true,
       ),
       body: FutureBuilder(
-          future: Provider.of<MovieProvider>(context).getAllWatchList(),
+          future: provider.getAllWatchList(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CustomLoading();
             } else if (!snapshot.hasData) {
               return Center(
-                child: Text('No Movies in Watch List.'),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.analytics_outlined,
+                      size: 52.0,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(height: 12.0),
+                    Text('No Movies in Watch List.'),
+                  ],
+                ),
               );
             } else {
               return Container(
                 child: ListView.builder(
                   itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) => CustomListItem(
-                    title: snapshot.data[index].title,
-                    subtitle: snapshot.data[index].year.toString(),
-                    imageUrl: snapshot.data[index].imageUrl,
-                    trailingItem: snapshot.data[index].rating.toString(),
-                    onTap: () => Navigator.of(context).pushNamed(
-                        Routes.movieDetailScreen,
-                        arguments: snapshot.data[index].id),
+                  itemBuilder: (context, index) => Dismissible(
+                    key: ValueKey(
+                        '${snapshot.data[index].title}/${snapshot.data[index].year}'),
+                    background: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          SizedBox(width: 12.0),
+                        ],
+                      ),
+                    ),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) {
+                      provider.deleteItem(snapshot.data[index].id);
+                      scaffoldKey.currentState
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            content: Text('Removed from watch list.'),
+                            backgroundColor: Theme.of(context).accentColor,
+                          ),
+                        );
+                    },
+                    child: CustomListItem(
+                      title: snapshot.data[index].title,
+                      subtitle: snapshot.data[index].year.toString(),
+                      imageUrl: snapshot.data[index].imageUrl,
+                      trailingItem: snapshot.data[index].rating.toString(),
+                      onTap: () => Navigator.of(context).pushNamed(
+                          Routes.movieDetailScreen,
+                          arguments: snapshot.data[index].id),
+                    ),
                   ),
                 ),
               );

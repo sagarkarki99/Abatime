@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:video_player/video_player.dart';
 
 class TvShowScreen extends StatefulWidget {
   @override
@@ -8,22 +7,22 @@ class TvShowScreen extends StatefulWidget {
 }
 
 class _TvShowScreenState extends State<TvShowScreen> {
-  VideoPlayerController _controller;
-  final String _videoUrl =
-      'https://vidcloud9.com/goto.php?url=aHR0cHM6LyAdeqwrwedffryretgsdFrsftrsvfsfsr9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2lkeWxsaWMtcmV0dXJuLTI5MjAxOS8xRUJNNDRCNThNRDcvMjJtXzE2MDQzNzM1OTUzMzE1MDYubXA0';
+  // VideoPlayerController _controller;
+  // final String _videoUrl =
+  //     'https://vidcloud9.com/goto.php?url=aHR0cHM6LyAdeqwrwedffryretgsdFrsftrsvfsfsr9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL2lkeWxsaWMtcmV0dXJuLTI5MjAxOS8xRUJNNDRCNThNRDcvMjJtXzE2MDQzNzM1OTUzMzE1MDYubXA0';
   // final String _videoUrl =
   //     'https://ytsembed.xyz/stream/8619B57A3F39F1B49A1A698EA5400A883928C0A2';
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(_videoUrl);
-    _controller.initialize();
-    _controller.play();
+    // _controller = VideoPlayerController.network(_videoUrl);
+    // _controller.initialize();
+    // _controller.play();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+   // _controller.dispose();
     super.dispose();
   }
 
@@ -47,11 +46,11 @@ class _TvShowScreenState extends State<TvShowScreen> {
               ),
             ),
           ),
-          Container(
-            height: 400,
-            width: MediaQuery.of(context).size.width,
-            child: VideoPlayer(_controller),
-          ),
+        //   Container(
+        //     height: 400,
+        //     width: MediaQuery.of(context).size.width,
+        //     child: VideoPlayer(_controller),
+        //   ),
         ],
       ),
     );

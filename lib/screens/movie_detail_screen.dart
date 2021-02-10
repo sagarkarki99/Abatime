@@ -1,19 +1,17 @@
 import 'dart:ui';
 
-import 'package:AbaTime/config/utils/torrent_manager.dart';
-
-import '../models/MovieDetail.dart';
-
-import '../providers/movies_provider.dart';
-import '../shimmers/movie_detail_shimmer.dart';
+import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' as url;
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import '../config/utils/torrent_manager.dart';
+import '../models/MovieDetail.dart';
+import '../providers/movies_provider.dart';
+import '../shimmers/movie_detail_shimmer.dart';
 import '../widgets/detail_screen_widget/content_header.dart';
-import 'package:provider/provider.dart';
 import '../widgets/widgets.dart';
-import 'package:device_apps/device_apps.dart';
-import 'package:android_intent/android_intent.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final String movieId;
@@ -132,6 +130,12 @@ class MovieDetailWidget extends StatelessWidget {
                     context: context,
                     backgroundColor: Theme.of(context).secondaryHeaderColor,
                     elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16.0),
+                        topRight: Radius.circular(16.0),
+                      ),
+                    ),
                     builder: (context) => DownloadContainer(movie),
                   );
                 },
@@ -148,7 +152,7 @@ class MovieDetailWidget extends StatelessWidget {
     final scaffoldContext = Scaffold.of(context);
     final movieProvider = Provider.of<MovieProvider>(context);
     final movie = movieProvider.getMovieDetail;
-    print(movie);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,7 +248,13 @@ class _DownloadContainerState extends State<DownloadContainer> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      height: 200,
+      height: MediaQuery.of(context).size.height * 0.30,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(18.0),
+          topRight: Radius.circular(18.0),
+        ),
+      ),
       child: widget.movie.torrents.length == 1
           ? _downloadSide(context, widget.movie.torrents[0])
           : Row(
@@ -269,20 +279,25 @@ class _DownloadContainerState extends State<DownloadContainer> {
           _openTorrentApp(torrent, context);
         },
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Icon(
+              Icons.tv,
+              size: 42,
+            ),
             Text(
               '${torrent.quality}',
               style: Theme.of(context).textTheme.headline5,
             ),
+            SizedBox(height: 8.0),
             Text(
               '${torrent.type}',
               style: Theme.of(context).textTheme.headline6,
             ),
             Text(
               '${torrent.size}',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.caption,
             ),
           ],
         ),

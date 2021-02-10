@@ -73,4 +73,9 @@ class MovieProvider extends BaseProvider {
     }
     return watchListMovies;
   }
+
+  Future<void> deleteItem(int id) async {
+    await _movieRepository.removeFromWatchList(id);
+    setUiState(ViewState.WITHDATA);
+  }
 }

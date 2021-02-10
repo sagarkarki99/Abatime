@@ -22,3 +22,9 @@ Future<dynamic> retrieve({String tableName}) async {
   final List<Map<String, dynamic>> maps = await database.query('$tableName');
   return maps;
 }
+
+Future<void> delete(int id, String tableName) async {
+  Database database = await _getDatabase();
+ final index = await database.delete(tableName, where: 'id = ?', whereArgs: [id]);
+ print('Response is $index');
+}

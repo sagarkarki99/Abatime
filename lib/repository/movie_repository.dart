@@ -94,6 +94,12 @@ class MovieRepository {
         .toList();
     return dbMovies;
   }
+
+  removeFromWatchList(int id) async {
+  await localDb.delete(id,'movies_table');
+  }
+
+  
 }
 
 class DbMovie {
