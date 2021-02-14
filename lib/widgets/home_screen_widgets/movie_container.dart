@@ -58,8 +58,8 @@ class MovieListContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final movieProvider = Provider.of<MovieProvider>(context, listen: false);
     final movies = movieProvider.moviesMap[sortName];
-    return Container(
-      height: 220,
+    return AspectRatio(
+      aspectRatio: 16 / 10,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: movies.length,

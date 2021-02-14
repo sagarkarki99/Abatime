@@ -1,6 +1,8 @@
+import 'package:AbaTime/providers/detail_provider.dart';
 import 'package:AbaTime/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Routes {
   static const homeScreen = '/home';
@@ -12,7 +14,12 @@ class Routes {
         case homeScreen:
           return HomeScreen();
         case movieDetailScreen:
-          return MovieDetailScreen(settings.arguments.toString());
+          return ChangeNotifierProvider(
+            create: (_) => DetailProvider(),
+            child: MovieDetailScreen(
+              settings.arguments.toString(),
+            ),
+          );
         default:
           return HomeScreen();
       }

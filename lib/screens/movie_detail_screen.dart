@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:AbaTime/providers/detail_provider.dart';
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class MovieDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: Provider.of<MovieProvider>(context, listen: false)
+        future: Provider.of<DetailProvider>(context, listen: false)
             .fetchMovieDetailWith(movieId.toString()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -150,8 +151,8 @@ class MovieDetailWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scaffoldContext = Scaffold.of(context);
-    final movieProvider = Provider.of<MovieProvider>(context);
-    final movie = movieProvider.getMovieDetail;
+    final movieProvider = Provider.of<DetailProvider>(context);
+    final movie = movieProvider.detailMovie;
 
     return SingleChildScrollView(
       child: Column(
