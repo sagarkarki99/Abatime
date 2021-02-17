@@ -1,7 +1,7 @@
+import 'package:AbaTime/providers/all_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/all_providers.dart';
 import '../widgets/widgets.dart';
 import 'screens.dart';
 

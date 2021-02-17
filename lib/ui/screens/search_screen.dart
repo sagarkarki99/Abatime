@@ -4,11 +4,11 @@ import 'package:AbaTime/models/Movie.dart';
 import 'package:AbaTime/providers/all_providers.dart';
 import 'package:AbaTime/providers/base_provider.dart';
 import 'package:AbaTime/shimmers/vertical_list_shimmer.dart';
-import 'package:AbaTime/widgets/widgets.dart';
+import 'package:AbaTime/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../routes.dart';
+import '../../routes.dart';
 
 class SearchScreen extends StatefulWidget {
   @override

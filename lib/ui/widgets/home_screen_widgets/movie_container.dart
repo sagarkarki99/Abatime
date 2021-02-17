@@ -1,12 +1,12 @@
+import 'package:AbaTime/models/Movie.dart';
+import 'package:AbaTime/models/core/entities/movie_stack.dart';
+import 'package:AbaTime/providers/all_providers.dart';
+import 'package:AbaTime/shimmers/movie_list_shimmer.dart';
+import 'package:AbaTime/shimmers/shimmer_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/Movie.dart';
-import '../../models/core/entities/movie_stack.dart';
-import '../../providers/all_providers.dart';
-import '../../shimmers/movie_list_shimmer.dart';
-import '../../shimmers/shimmer_item.dart';
 
 class MovieContainer extends StatefulWidget {
   final MovieStack movieStack;
