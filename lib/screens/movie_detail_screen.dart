@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:AbaTime/providers/detail_provider.dart';
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +8,8 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../config/utils/torrent_manager.dart';
 import '../models/MovieDetail.dart';
-import '../providers/movies_provider.dart';
+import '../models/core/entities/movie_stack.dart';
+import '../providers/detail_provider.dart';
 import '../shimmers/movie_detail_shimmer.dart';
 import '../widgets/detail_screen_widget/content_header.dart';
 import '../widgets/widgets.dart';
@@ -230,6 +230,16 @@ class MovieDetailWidget extends StatelessWidget {
             ),
           ),
           movie.cast == null ? SizedBox() : CastContainer(casts: movie.cast),
+          MovieContainer(
+            genre: movie.genres[0],
+            movieStack: MovieStack(
+              sortBy: 'recently_added',
+              stackName: 'Similar Movies',
+            ),
+            onMovieSelect: (movie) {
+              context.read<DetailProvider>().fetchMovieDetailWith(movie.id.toString());
+            },
+          ),
         ],
       ),
     );

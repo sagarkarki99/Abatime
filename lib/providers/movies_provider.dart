@@ -1,9 +1,10 @@
-import 'package:AbaTime/models/Movie.dart';
-import 'package:AbaTime/models/MovieDetail.dart' as movieDetail;
-import 'package:AbaTime/repository/app_error.dart';
-import 'package:AbaTime/repository/movie_repository.dart';
 import 'package:dartz/dartz.dart';
 
+import '../models/Movie.dart';
+import '../models/MovieDetail.dart' as movieDetail;
+import '../models/core/entities/movie_stack.dart';
+import '../repository/app_error.dart';
+import '../repository/movie_repository.dart';
 import 'base_provider.dart';
 
 class MovieProvider extends BaseProvider {
@@ -19,21 +20,27 @@ class MovieProvider extends BaseProvider {
   movieDetail.Movie get getMovieDetail => _detailMovie;
   Map<String, List<Movie>> get moviesMap => {..._allMovies};
 
-  Future<void> fetchMovies(String sortName, String genre) async {
+  Future<void> fetchMovies(MovieStack _movieStack, String genre) async {
     // setUiState(ViewState.LOADING);
 
-    Either<AppError, List<Movie>> eitherResult =
-        await _movieRepository.getAllMovies(sortName, genre);
-    eitherResult.fold((AppError error) {
-      setErrorMessage(error.toString());
-      setUiState(ViewState.WITHERROR);
-      return Future<String>.error(
-          error.toString(), StackTrace.fromString(error.toString()));
-    }, (List<Movie> movies) {
-      _movies = movies;
-      _allMovies[sortName] = movies;
-      setUiState(ViewState.WITHDATA);
-    });
+    try {
+      return Future.value(_movieStack.retrieve(genre));
+    } catch (error) {
+      return Future.error(error);
+    }
+
+    // Either<AppError, List<Movie>> eitherResult =
+    //     await _movieRepository.getAllMovies(sortName, genre);
+    // eitherResult.fold((AppError error) {
+    //   setErrorMessage(error.toString());
+    //   setUiState(ViewState.WITHERROR);
+    //   return Future<String>.error(
+    //       error.toString(), StackTrace.fromString(error.toString()));
+    // }, (List<Movie> movies) {
+    //   _movies = movies;
+    //   _allMovies[sortName] = movies;
+    //   setUiState(ViewState.WITHDATA);
+    // });
   }
 
   Future<void> fetchMovieDetailWith(String id) async {

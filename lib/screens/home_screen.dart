@@ -1,6 +1,9 @@
+import 'package:AbaTime/models/Movie.dart';
+import 'package:AbaTime/models/core/entities/movie_stack.dart';
 import 'package:AbaTime/providers/genre_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../routes.dart';
 import '../widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,17 +14,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Widget _moviesDivision(Map<String, String> title, String genre) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 4.0,
-      ),
-      sliver: SliverToBoxAdapter(
-        child: MovieContainer(
-            key: PageStorageKey(title.keys.first), title: title, genre: genre),
-      ),
-    );
+  List<MovieStack> movieStacks;
+
+  @override
+  void initState() {
+    super.initState();
+    movieStacks = [
+      MovieStack(stackName: 'Recently Added', sortBy: 'date_added'),
+      MovieStack(sortBy:'year',stackName: 'This Year'),
+      MovieStack(sortBy: 'rating', stackName: 'Top Rated'),
+      MovieStack(sortBy: 'download_count', stackName: 'Most Downloaded'),
+      MovieStack(sortBy: 'like_count', stackName: 'Top Favourites'),
+    ];
   }
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +39,32 @@ class _HomeScreenState extends State<HomeScreen> {
       body: CustomScrollView(
         slivers: [
           CustomAppBar(),
-          _moviesDivision({'date_added': 'Recently Added'}, genre),
-          _moviesDivision({'rating': 'Top Rated'}, genre),
-          _moviesDivision({'download_count': 'Most Downloaded'}, genre),
-          _moviesDivision({'like_count': 'Top Favourites'}, genre),
+          ...movieStacks
+              .map((movieObject) => _moviesDivision(movieObject, genre))
+              .toList()
         ],
       ),
     );
+  }
+
+   Widget _moviesDivision(MovieStack stack, String genre) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 4.0,
+      ),
+      sliver: SliverToBoxAdapter(
+        child: MovieContainer(
+          key: PageStorageKey(stack.sortBy),
+          movieStack: stack,
+          genre: genre,
+          onMovieSelect: (movie) => _navigateToNextScreen(context, movie),
+        ),
+      ),
+    );
+  }
+
+  _navigateToNextScreen(BuildContext context, Movie movie) {
+    Navigator.of(context)
+        .pushNamed(Routes.movieDetailScreen, arguments: movie.id);
   }
 }

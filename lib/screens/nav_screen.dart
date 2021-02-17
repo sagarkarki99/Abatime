@@ -1,8 +1,9 @@
-import 'package:AbaTime/providers/all_providers.dart';
-import 'package:AbaTime/screens/screens.dart';
-import 'package:AbaTime/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/all_providers.dart';
+import '../widgets/widgets.dart';
+import 'screens.dart';
 
 class NavScreen extends StatefulWidget {
   NavScreen({Key key}) : super(key: key);
@@ -22,14 +23,13 @@ class _NavScreenState extends State<NavScreen> {
         key: PageStorageKey('HomeScreen'),
       ),
     ),
-    TvShowScreen(),
+    
     SearchScreen(),
     WatchListScreen(),
   ];
 
   final Map<String, IconData> _icons = const {
     'Movies': Icons.personal_video,
-    'Tv Shows': Icons.ondemand_video,
     'Search': Icons.search,
     'Watch List': Icons.format_list_bulleted
   };

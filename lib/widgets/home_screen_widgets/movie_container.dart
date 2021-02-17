@@ -1,21 +1,34 @@
-import 'package:AbaTime/models/Movie.dart';
-import 'package:AbaTime/providers/all_providers.dart';
-import 'package:AbaTime/shimmers/movie_list_shimmer.dart';
-import 'package:AbaTime/shimmers/shimmer_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../routes.dart';
+import '../../models/Movie.dart';
+import '../../models/core/entities/movie_stack.dart';
+import '../../providers/all_providers.dart';
+import '../../shimmers/movie_list_shimmer.dart';
+import '../../shimmers/shimmer_item.dart';
 
-class MovieContainer extends StatelessWidget {
-  final Map<String, String> title;
+class MovieContainer extends StatefulWidget {
+  final MovieStack movieStack;
   final String genre;
-  const MovieContainer({Key key, this.title, this.genre}) : super(key: key);
+  final Function(Movie movie) onMovieSelect;
+  const MovieContainer(
+      {Key key, this.genre, this.movieStack, this.onMovieSelect})
+      : super(key: key);
+
+  @override
+  _MovieContainerState createState() => _MovieContainerState();
+}
+
+class _MovieContainerState extends State<MovieContainer> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('Movie Container build with $genre');
+    print('Movie Container build with ${widget.genre}');
     final movieProvider = Provider.of<MovieProvider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,7 +36,7 @@ class MovieContainer extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
           child: Text(
-            title.values.first,
+            widget.movieStack.stackName,
             style: Theme.of(context)
                 .textTheme
                 .headline6
@@ -32,14 +45,16 @@ class MovieContainer extends StatelessWidget {
         ),
         const SizedBox(height: 8.0),
         FutureBuilder(
-          future: movieProvider.fetchMovies(title.keys.first, genre),
+          future: movieProvider.fetchMovies(widget.movieStack, widget.genre),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return MovieListShimmer();
             } else if (snapshot.error != null) {
               return Text('${snapshot.error.toString()}');
             } else {
-              return MovieListContainer(sortName: title.keys.first);
+              return MovieListContainer(
+                  movieStack: widget.movieStack,
+                  onSelect: (movie) => widget.onMovieSelect(movie));
             }
           },
         ),
@@ -49,31 +64,25 @@ class MovieContainer extends StatelessWidget {
 }
 
 class MovieListContainer extends StatelessWidget {
-  final String sortName;
-
-  const MovieListContainer({Key key, @required this.sortName})
+  final MovieStack movieStack;
+  final Function(Movie) onSelect;
+  const MovieListContainer({Key key, @required this.movieStack, this.onSelect})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final movieProvider = Provider.of<MovieProvider>(context, listen: false);
-    final movies = movieProvider.moviesMap[sortName];
+    final movies = movieStack.movies;
     return AspectRatio(
-      aspectRatio: 16 / 10,
+      aspectRatio: movieStack.sortBy == 'year' ? 16 / 14 : 16 / 10,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: movies.length,
+        itemCount: movieStack.movies.length,
         itemBuilder: (_, index) => InkWell(
-          onTap: () => navigateToNextScreen(context, movies[index]),
+          onTap: () => onSelect(movies[index]),
           child: MovieItem(movie: movies[index]),
         ),
       ),
     );
-  }
-
-  navigateToNextScreen(BuildContext context, Movie movie) {
-    Navigator.of(context)
-        .pushNamed(Routes.movieDetailScreen, arguments: movie.id);
   }
 }
 
