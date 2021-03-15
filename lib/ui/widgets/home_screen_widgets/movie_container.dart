@@ -1,9 +1,10 @@
-import 'package:AbaTime/models/Movie.dart';
-import 'package:AbaTime/models/core/entities/movie_stack.dart';
-import 'package:AbaTime/providers/all_providers.dart';
-import 'package:AbaTime/shimmers/movie_list_shimmer.dart';
-import 'package:AbaTime/shimmers/shimmer_item.dart';
+import 'package:abatime/models/Movie.dart';
+import 'package:abatime/models/core/entities/movie_stack.dart';
+import 'package:abatime/providers/all_providers.dart';
+import 'package:abatime/shimmers/movie_list_shimmer.dart';
+import 'package:abatime/shimmers/shimmer_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -119,7 +120,7 @@ class MovieItem extends StatelessWidget {
                   movie.rating.toString(),
                 ),
                 Icon(
-                  Icons.star,
+                  FluentIcons.star_24_filled,
                   size: 18,
                   color: Theme.of(context).accentColor,
                 ),

@@ -1,5 +1,5 @@
-import 'package:AbaTime/https/api_client.dart';
-import 'package:AbaTime/models/core/entities/movie_stack.dart';
+import 'package:abatime/https/api_client.dart';
+import 'package:abatime/models/core/entities/movie_stack.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart' as matcher;

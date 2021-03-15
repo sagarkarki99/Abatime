@@ -1,7 +1,7 @@
-import 'package:AbaTime/models/MovieDetail.dart';
-import 'package:AbaTime/providers/base_provider.dart';
-import 'package:AbaTime/repository/app_error.dart';
-import 'package:AbaTime/repository/movie_repository.dart';
+import 'package:abatime/models/MovieDetail.dart';
+import 'package:abatime/providers/base_provider.dart';
+import 'package:abatime/repository/app_error.dart';
+import 'package:abatime/repository/movie_repository.dart';
 import 'package:dartz/dartz.dart';
 
 class DetailProvider extends BaseProvider{

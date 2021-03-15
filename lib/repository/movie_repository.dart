@@ -1,8 +1,8 @@
-import 'package:AbaTime/config/end_points.dart';
-import 'package:AbaTime/https/api_client.dart';
-import 'package:AbaTime/models/Movie.dart';
-import 'package:AbaTime/models/MovieResponse.dart';
-import 'package:AbaTime/models/MovieDetail.dart' as movieDetail;
+import 'package:abatime/config/end_points.dart';
+import 'package:abatime/https/api_client.dart';
+import 'package:abatime/models/Movie.dart';
+import 'package:abatime/models/MovieResponse.dart';
+import 'package:abatime/models/MovieDetail.dart' as movieDetail;
 import 'package:dartz/dartz.dart';
 import '../repository/local_database.dart' as localDb;
 import 'app_error.dart';

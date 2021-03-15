@@ -1,11 +1,12 @@
 import 'dart:ui';
 
-import 'package:AbaTime/config/utils/torrent_manager.dart';
-import 'package:AbaTime/models/MovieDetail.dart';
-import 'package:AbaTime/models/core/entities/movie_stack.dart';
-import 'package:AbaTime/providers/detail_provider.dart';
-import 'package:AbaTime/shimmers/movie_detail_shimmer.dart';
+import 'package:abatime/config/utils/torrent_manager.dart';
+import 'package:abatime/models/MovieDetail.dart';
+import 'package:abatime/models/core/entities/movie_stack.dart';
+import 'package:abatime/providers/detail_provider.dart';
+import 'package:abatime/shimmers/movie_detail_shimmer.dart';
 import 'package:android_intent/android_intent.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' as url;
@@ -44,7 +45,7 @@ class MovieDetailWidget extends StatelessWidget {
   playTrailer(BuildContext context, Movie movie) {
     showDialog(
       context: context,
-      child: Dialog(
+      builder: (_) => Dialog(
         child: YoutubePlayerBuilder(
           player: YoutubePlayer(
             controller: YoutubePlayerController(
@@ -91,7 +92,7 @@ class MovieDetailWidget extends StatelessWidget {
                 Colors.black45
               ])),
               child: Icon(
-                Icons.play_circle_filled,
+                FluentIcons.play_circle_24_regular,
                 size: 38,
                 color: Colors.white70,
               ),
@@ -104,22 +105,21 @@ class MovieDetailWidget extends StatelessWidget {
             children: [
               IconWithInfo(
                 label: '${movie.rating.toString()} / 10',
-                icon: Icons.star,
+                icon: FluentIcons.star_28_filled,
               ),
               SizedBox(height: 16.0),
               IconWithInfo(
-                label: movie.downloadCount.toString(),
-                icon: Icons.file_download,
-              ),
+                  label: movie.downloadCount.toString(),
+                  icon: FluentIcons.arrow_download_24_filled),
               SizedBox(height: 16.0),
               IconWithInfo(
                 label: movie.likeCount.toString(),
-                icon: Icons.favorite,
+                icon: FluentIcons.heart_24_filled,
               ),
               SizedBox(height: 16.0),
               TextButton.icon(
                 icon: Icon(
-                  Icons.file_download,
+                  FluentIcons.arrow_download_24_regular,
                   color: Theme.of(context).accentColor,
                 ),
                 label: Text(
@@ -185,7 +185,7 @@ class MovieDetailWidget extends StatelessWidget {
                   flex: 1,
                   child: IconButton(
                     tooltip: 'Add to Watch List',
-                    icon: Icon(Icons.add_to_queue),
+                    icon: Icon(FluentIcons.add_circle_24_regular),
                     onPressed: () {
                       //saving this movie to local db as watchlist
                       movieProvider.addToWatchList(movie);
@@ -237,7 +237,9 @@ class MovieDetailWidget extends StatelessWidget {
               stackName: 'Similar Movies',
             ),
             onMovieSelect: (movie) {
-              context.read<DetailProvider>().fetchMovieDetailWith(movie.id.toString());
+              context
+                  .read<DetailProvider>()
+                  .fetchMovieDetailWith(movie.id.toString());
             },
           ),
         ],
@@ -272,7 +274,7 @@ class _DownloadContainerState extends State<DownloadContainer> {
               children: [
                 _downloadSide(context, widget.movie.torrents[0]),
                 VerticalDivider(
-                  color: Colors.red,
+                  color: Colors.black,
                 ),
                 _downloadSide(context, widget.movie.torrents[1]),
               ],
@@ -289,28 +291,39 @@ class _DownloadContainerState extends State<DownloadContainer> {
           Navigator.pop(context);
           _openTorrentApp(torrent, context);
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.tv,
-              size: 42,
-            ),
-            Text(
-              '${torrent.quality}',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            SizedBox(height: 8.0),
-            Text(
-              '${torrent.type}',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            Text(
-              '${torrent.size}',
-              style: Theme.of(context).textTheme.caption,
-            ),
-          ],
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black38,
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.tv, size: 42, color: Colors.grey),
+              Text(
+                '${torrent.quality}',
+                style: Theme.of(context).textTheme.headline5.copyWith(
+                      letterSpacing: 2.0,
+                      color: Colors.grey,
+                    ),
+              ),
+              SizedBox(height: 8.0),
+              Text(
+                '${torrent.type}',
+                style: Theme.of(context).textTheme.headline6.copyWith(
+                      letterSpacing: 2.0,
+                    ),
+              ),
+              SizedBox(height: 4.0),
+              Text(
+                '${torrent.size}',
+                style: Theme.of(context).textTheme.caption.copyWith(
+                      color: Colors.grey,
+                    ),
+              ),
+            ],
+          ),
         ),
       ),
     );

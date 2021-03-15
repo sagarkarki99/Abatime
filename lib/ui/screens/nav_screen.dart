@@ -1,4 +1,5 @@
-import 'package:AbaTime/providers/all_providers.dart';
+import 'package:abatime/providers/all_providers.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,16 +24,24 @@ class _NavScreenState extends State<NavScreen> {
         key: PageStorageKey('HomeScreen'),
       ),
     ),
-    
     SearchScreen(),
     WatchListScreen(),
   ];
 
-  final Map<String, IconData> _icons = const {
-    'Movies': Icons.personal_video,
-    'Search': Icons.search,
-    'Watch List': Icons.format_list_bulleted
-  };
+  final List<BottomNavigationBarItem> _items = [
+    BottomNavigationBarItem(
+        icon: Icon(FluentIcons.tv_24_regular),
+        activeIcon: Icon(FluentIcons.tv_24_filled),
+        label: 'Movies'),
+    BottomNavigationBarItem(
+        icon: Icon(FluentIcons.search_24_regular),
+        activeIcon: Icon(FluentIcons.search_24_filled),
+        label: 'Search'),
+    BottomNavigationBarItem(
+        icon: Icon(FluentIcons.list_24_regular),
+        activeIcon: Icon(FluentIcons.list_24_filled),
+        label: 'Watch List'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -50,18 +59,7 @@ class _NavScreenState extends State<NavScreen> {
         bottomNavigationBar: ResponsiveWidget.isMobile(context)
             ? BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
-                items: _icons
-                    .map(
-                      (title, icon) => MapEntry(
-                        title,
-                        BottomNavigationBarItem(
-                          icon: Icon(icon),
-                          label: title,
-                        ),
-                      ),
-                    )
-                    .values
-                    .toList(),
+                items: _items,
                 backgroundColor: Colors.black,
                 currentIndex: _currentIndex,
                 selectedItemColor: Colors.white,

@@ -1,4 +1,4 @@
-import 'package:AbaTime/providers/genre_provider.dart';
+import 'package:abatime/providers/genre_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,4 +1,4 @@
-import 'package:AbaTime/models/Movie.dart';
+import 'package:abatime/models/Movie.dart';
 
 class MovieResponse {
   String status;

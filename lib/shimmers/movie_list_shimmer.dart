@@ -1,5 +1,5 @@
-import 'package:AbaTime/shimmers/base_shimmer.dart';
-import 'package:AbaTime/shimmers/shimmer_item.dart';
+import 'package:abatime/shimmers/base_shimmer.dart';
+import 'package:abatime/shimmers/shimmer_item.dart';
 import 'package:flutter/material.dart';
 
 class MovieListShimmer extends StatelessWidget {

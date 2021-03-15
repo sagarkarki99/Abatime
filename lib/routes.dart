@@ -1,5 +1,5 @@
-import 'package:AbaTime/providers/detail_provider.dart';
-import 'package:AbaTime/ui/screens/screens.dart';
+import 'package:abatime/providers/detail_provider.dart';
+import 'package:abatime/ui/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

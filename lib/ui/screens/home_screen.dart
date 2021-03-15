@@ -1,6 +1,6 @@
-import 'package:AbaTime/models/Movie.dart';
-import 'package:AbaTime/models/core/entities/movie_stack.dart';
-import 'package:AbaTime/providers/genre_provider.dart';
+import 'package:abatime/models/Movie.dart';
+import 'package:abatime/models/core/entities/movie_stack.dart';
+import 'package:abatime/providers/genre_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';

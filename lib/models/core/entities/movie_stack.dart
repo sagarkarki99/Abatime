@@ -1,9 +1,9 @@
-import 'package:AbaTime/config/end_points.dart';
-import 'package:AbaTime/https/api_client.dart';
-import 'package:AbaTime/models/Movie.dart';
-import 'package:AbaTime/models/MovieResponse.dart';
-import 'package:AbaTime/models/core/abatime_stack.dart';
-import 'package:AbaTime/repository/app_error.dart';
+import 'package:abatime/config/end_points.dart';
+import 'package:abatime/https/api_client.dart';
+import 'package:abatime/models/Movie.dart';
+import 'package:abatime/models/MovieResponse.dart';
+import 'package:abatime/models/core/abatime_stack.dart';
+import 'package:abatime/repository/app_error.dart';
 
 class MovieStack extends AbaTimeStack<Movie> {
   final sortBy;
