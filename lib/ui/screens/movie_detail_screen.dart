@@ -1,15 +1,14 @@
 import 'dart:ui';
 
-import 'package:abatime/config/utils/torrent_manager.dart';
 import 'package:abatime/models/MovieDetail.dart';
 import 'package:abatime/models/core/entities/movie_stack.dart';
 import 'package:abatime/providers/detail_provider.dart';
 import 'package:abatime/shimmers/movie_detail_shimmer.dart';
-import 'package:android_intent/android_intent.dart';
+import 'package:abatime/ui/widgets/detail_screen_widget/download_container.dart';
+import 'package:abatime/ui/widgets/detail_screen_widget/movie_stat_info.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart' as url;
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../widgets/detail_screen_widget/content_header.dart';
@@ -42,6 +41,91 @@ class MovieDetailScreen extends StatelessWidget {
 }
 
 class MovieDetailWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final scaffoldContext = Scaffold.of(context);
+    final movieProvider = Provider.of<DetailProvider>(context);
+    final movie = movieProvider.detailMovie;
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ContentHeader(
+            sc1: movie.mediumScreenshotImage1,
+            sc2: movie.mediumScreenshotImage2,
+            sc3: movie.mediumScreenshotImage3,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: _movieInfoContainer(context, movie),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: MovieTitle(movieTitle: movie.titleLong),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: IconButton(
+                    tooltip: 'Add to Watch List',
+                    icon: Icon(FluentIcons.add_circle_24_regular),
+                    onPressed: () {
+                      //saving this movie to local db as watchlist
+                      movieProvider.addToWatchList(movie);
+                      scaffoldContext.hideCurrentSnackBar();
+                      scaffoldContext.showSnackBar(
+                        SnackBar(
+                          content: Text('Added to Watch List'),
+                          backgroundColor:
+                              Theme.of(context).secondaryHeaderColor,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 12),
+          Wrap(
+            direction: Axis.horizontal,
+            children: [
+              ...movie.genres
+                  .map(
+                    (movie) => CustomChip(
+                      label: movie.toString(),
+                      color: Theme.of(context).accentColor,
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: MovieDescription(movie: movie),
+          ),
+          movie.cast == null ? SizedBox() : CastContainer(casts: movie.cast),
+          MovieContainer(
+            genre: movie.genres[0],
+            movieStack: MovieStack(
+              sortBy: 'recently_added',
+              stackName: 'Similar Movies',
+            ),
+            onMovieSelect: (movie) {
+              context
+                  .read<DetailProvider>()
+                  .fetchMovieDetailWith(movie.id.toString());
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   playTrailer(BuildContext context, Movie movie) {
     showDialog(
       context: context,
@@ -86,11 +170,12 @@ class MovieDetailWidget extends StatelessWidget {
               width: 150,
               height: 200,
               decoration: BoxDecoration(
-                  gradient: RadialGradient(colors: [
-                Colors.black45,
-                Colors.transparent,
-                Colors.black45
-              ])),
+                gradient: RadialGradient(colors: [
+                  Colors.transparent,
+                  Colors.black45,
+                  Colors.transparent,
+                ]),
+              ),
               child: Icon(
                 FluentIcons.play_circle_24_regular,
                 size: 38,
@@ -103,18 +188,18 @@ class MovieDetailWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconWithInfo(
+              MovieStatInfo(
                 label: '${movie.rating.toString()} / 10',
-                icon: FluentIcons.star_28_filled,
+                iconData: FluentIcons.star_28_filled,
               ),
               SizedBox(height: 16.0),
-              IconWithInfo(
+              MovieStatInfo(
                   label: movie.downloadCount.toString(),
-                  icon: FluentIcons.arrow_download_24_filled),
+                  iconData: FluentIcons.arrow_download_24_filled),
               SizedBox(height: 16.0),
-              IconWithInfo(
+              MovieStatInfo(
                 label: movie.likeCount.toString(),
-                icon: FluentIcons.heart_24_filled,
+                iconData: FluentIcons.heart_24_filled,
               ),
               SizedBox(height: 16.0),
               TextButton.icon(
@@ -147,199 +232,41 @@ class MovieDetailWidget extends StatelessWidget {
       ],
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    final scaffoldContext = Scaffold.of(context);
-    final movieProvider = Provider.of<DetailProvider>(context);
-    final movie = movieProvider.detailMovie;
-
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ContentHeader(
-            sc1: movie.mediumScreenshotImage1,
-            sc2: movie.mediumScreenshotImage2,
-            sc3: movie.mediumScreenshotImage3,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: _movieInfoContainer(context, movie),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: Text(
-                    movie.titleLong,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        .copyWith(letterSpacing: 2.0),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: IconButton(
-                    tooltip: 'Add to Watch List',
-                    icon: Icon(FluentIcons.add_circle_24_regular),
-                    onPressed: () {
-                      //saving this movie to local db as watchlist
-                      movieProvider.addToWatchList(movie);
-                      scaffoldContext.hideCurrentSnackBar();
-                      scaffoldContext.showSnackBar(
-                        SnackBar(
-                          content: Text('Added to Watch List'),
-                          backgroundColor:
-                              Theme.of(context).secondaryHeaderColor,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 12),
-          Wrap(
-            direction: Axis.horizontal,
-            children: [
-              ...movie.genres
-                  .map(
-                    (movie) => CustomChip(
-                      label: movie.toString(),
-                      color: Theme.of(context).accentColor,
-                    ),
-                  )
-                  .toList(),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              movie.descriptionFull,
-              textAlign: TextAlign.left,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  .copyWith(color: Colors.white60),
-              strutStyle: StrutStyle(leading: 0.5),
-            ),
-          ),
-          movie.cast == null ? SizedBox() : CastContainer(casts: movie.cast),
-          MovieContainer(
-            genre: movie.genres[0],
-            movieStack: MovieStack(
-              sortBy: 'recently_added',
-              stackName: 'Similar Movies',
-            ),
-            onMovieSelect: (movie) {
-              context
-                  .read<DetailProvider>()
-                  .fetchMovieDetailWith(movie.id.toString());
-            },
-          ),
-        ],
-      ),
-    );
-  }
 }
 
-class DownloadContainer extends StatefulWidget {
+class MovieDescription extends StatelessWidget {
+  const MovieDescription({
+    Key key,
+    @required this.movie,
+  }) : super(key: key);
+
   final Movie movie;
-  DownloadContainer(this.movie);
 
-  @override
-  _DownloadContainerState createState() => _DownloadContainerState();
-}
-
-class _DownloadContainerState extends State<DownloadContainer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      height: MediaQuery.of(context).size.height * 0.30,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(18.0),
-          topRight: Radius.circular(18.0),
-        ),
-      ),
-      child: widget.movie.torrents.length == 1
-          ? _downloadSide(context, widget.movie.torrents[0])
-          : Row(
-              children: [
-                _downloadSide(context, widget.movie.torrents[0]),
-                VerticalDivider(
-                  color: Colors.black,
-                ),
-                _downloadSide(context, widget.movie.torrents[1]),
-              ],
-            ),
+    return Text(
+      movie.descriptionFull,
+      textAlign: TextAlign.left,
+      style:
+          Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.white60),
+      strutStyle: StrutStyle(leading: 0.5),
     );
   }
+}
 
-  _downloadSide(BuildContext context, Torrents torrent) {
-    return Expanded(
-      flex: 1,
-      child: InkWell(
-        splashColor: Theme.of(context).accentColor.withOpacity(0.5),
-        onTap: () {
-          Navigator.pop(context);
-          _openTorrentApp(torrent, context);
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black38,
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(Icons.tv, size: 42, color: Colors.grey),
-              Text(
-                '${torrent.quality}',
-                style: Theme.of(context).textTheme.headline5.copyWith(
-                      letterSpacing: 2.0,
-                      color: Colors.grey,
-                    ),
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                '${torrent.type}',
-                style: Theme.of(context).textTheme.headline6.copyWith(
-                      letterSpacing: 2.0,
-                    ),
-              ),
-              SizedBox(height: 4.0),
-              Text(
-                '${torrent.size}',
-                style: Theme.of(context).textTheme.caption.copyWith(
-                      color: Colors.grey,
-                    ),
-              ),
-            ],
-          ),
-        ),
-      ),
+class MovieTitle extends StatelessWidget {
+  final String movieTitle;
+
+  const MovieTitle({
+    Key key,
+    @required this.movieTitle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      movieTitle,
+      style: Theme.of(context).textTheme.headline6.copyWith(letterSpacing: 2.0),
     );
-  }
-
-  void _openTorrentApp(Torrents torrent, BuildContext context) async {
-    if (await TorrentManager.isTorrentClientAvailable()) {
-      AndroidIntent intent = AndroidIntent(
-        action: 'action_view',
-        package: TorrentManager.getAvailableClient(),
-        data: TorrentManager.getMagnetUrl(torrent.hash, torrent.url),
-      );
-      await intent.launch();
-    } else {
-      await url.launch(
-          'https://play.google.com/store/apps/details?id=com.bittorrent.client&hl=en&gl=US');
-    }
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class IconWithInfo extends StatelessWidget {
-  final label;
-  final icon;
+  final String label;
+  final IconData icon;
   const IconWithInfo({Key key, this.label, this.icon}) : super(key: key);
 
   @override
@@ -17,11 +17,13 @@ class IconWithInfo extends StatelessWidget {
         SizedBox(
           width: 4.0,
         ),
-        Text('$label',
-            style: Theme.of(context).textTheme.headline5.copyWith(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white70,
-                )),
+        Text(
+          '$label',
+          style: Theme.of(context).textTheme.headline5.copyWith(
+                fontWeight: FontWeight.w400,
+                color: Colors.white70,
+              ),
+        ),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:abatime/providers/movies_provider.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/widgets.dart';
@@ -13,7 +14,7 @@ class WatchListScreen extends StatelessWidget {
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).secondaryHeaderColor,
-        title: Text('Watch List'),
+        title: Text('My Watchlist'),
         centerTitle: true,
       ),
       body: FutureBuilder(
@@ -27,7 +28,7 @@ class WatchListScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      Icons.analytics_outlined,
+                      FluentIcons.movies_and_tv_24_filled,
                       size: 52.0,
                       color: Colors.grey,
                     ),
