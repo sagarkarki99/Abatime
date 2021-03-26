@@ -71,8 +71,8 @@ class _SearchScreenState extends State<SearchScreen> {
             );
           } else {
             return CustomLabelWithIcon(
-              icon: Icons.search,
-              label: 'Search with movies title, actor name ...',
+              icon: FluentIcons.search_28_regular,
+              label: 'Search with movies title...',
             );
           }
         }),

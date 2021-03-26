@@ -28,19 +28,6 @@ class MovieProvider extends BaseProvider {
     } catch (error) {
       return Future.error(error);
     }
-
-    // Either<AppError, List<Movie>> eitherResult =
-    //     await _movieRepository.getAllMovies(sortName, genre);
-    // eitherResult.fold((AppError error) {
-    //   setErrorMessage(error.toString());
-    //   setUiState(ViewState.WITHERROR);
-    //   return Future<String>.error(
-    //       error.toString(), StackTrace.fromString(error.toString()));
-    // }, (List<Movie> movies) {
-    //   _movies = movies;
-    //   _allMovies[sortName] = movies;
-    //   setUiState(ViewState.WITHDATA);
-    // });
   }
 
   Future<void> fetchMovieDetailWith(String id) async {

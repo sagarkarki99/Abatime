@@ -14,7 +14,7 @@ class WatchListScreen extends StatelessWidget {
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).secondaryHeaderColor,
-        title: Text('My Watchlist'),
+        title: Text('My Watch List'),
         centerTitle: true,
       ),
       body: FutureBuilder(
@@ -24,19 +24,10 @@ class WatchListScreen extends StatelessWidget {
               return CustomLoading();
             } else if (!snapshot.hasData) {
               return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      FluentIcons.movies_and_tv_24_filled,
-                      size: 52.0,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(height: 12.0),
-                    Text('No Movies in Watch List.'),
-                  ],
-                ),
-              );
+                  child: CustomLabelWithIcon(
+                icon: FluentIcons.movies_and_tv_24_filled,
+                label: 'No Movies in Watch List.',
+              ));
             } else {
               return Container(
                 child: ListView.builder(

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../widgets/widgets.dart';
-
+import '../widgets/ads_widgets/banner_widget.dart';
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
 
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
           CustomAppBar(),
           ...movieStacks
               .map((movieObject) => _moviesDivision(movieObject, genre))
-              .toList()
+              .toList(),
         ],
       ),
     );

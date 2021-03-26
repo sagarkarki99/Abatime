@@ -5,6 +5,7 @@ import 'package:abatime/models/core/entities/movie_stack.dart';
 import 'package:abatime/providers/detail_provider.dart';
 import 'package:abatime/shimmers/movie_detail_shimmer.dart';
 import 'package:abatime/ui/widgets/detail_screen_widget/download_container.dart';
+import 'package:abatime/ui/widgets/ads_widgets/banner_widget.dart';
 import 'package:abatime/ui/widgets/detail_screen_widget/movie_stat_info.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +109,7 @@ class MovieDetailWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: MovieDescription(movie: movie),
           ),
+          BannerWidget(),
           movie.cast == null ? SizedBox() : CastContainer(casts: movie.cast),
           MovieContainer(
             genre: movie.genres[0],
@@ -135,7 +137,11 @@ class MovieDetailWidget extends StatelessWidget {
             controller: YoutubePlayerController(
               initialVideoId: movie.ytTrailerCode,
               flags: YoutubePlayerFlags(
-                  autoPlay: true, mute: false, forceHD: true),
+                autoPlay: true,
+                mute: false,
+                forceHD: true,
+
+              ),
             ),
             thumbnail: Image.network(movie.mediumCoverImage),
             showVideoProgressIndicator: true,

@@ -1,17 +1,27 @@
 import 'dart:io';
 
 import 'package:abatime/config/theme.dart';
+import 'package:abatime/config/utils/ad_manager.dart';
 import 'package:abatime/providers/all_providers.dart';
 import 'package:abatime/ui/screens/screens.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 import 'routes.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  final initFuture = MobileAds.instance.initialize();
+  final adManager = AdManager(initFuture);
+  runApp(
+    Provider.value(
+      value: adManager,
+      builder: (_, __) => MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -32,7 +42,7 @@ class MyApp extends StatelessWidget {
     FutureBuilder(
         future: Future.delayed(
           Duration(
-            seconds: 4,
+            seconds: 3,
           ),
         ),
         builder: (context, snapshot) {

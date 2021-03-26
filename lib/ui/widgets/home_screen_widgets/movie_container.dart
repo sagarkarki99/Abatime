@@ -3,11 +3,11 @@ import 'package:abatime/models/core/entities/movie_stack.dart';
 import 'package:abatime/providers/all_providers.dart';
 import 'package:abatime/shimmers/movie_list_shimmer.dart';
 import 'package:abatime/shimmers/shimmer_item.dart';
+import 'package:abatime/ui/widgets/ads_widgets/banner_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 
 class MovieContainer extends StatefulWidget {
   final MovieStack movieStack;
@@ -64,24 +64,42 @@ class _MovieContainerState extends State<MovieContainer> {
   }
 }
 
-class MovieListContainer extends StatelessWidget {
+class MovieListContainer extends StatefulWidget {
   final MovieStack movieStack;
   final Function(Movie) onSelect;
   const MovieListContainer({Key key, @required this.movieStack, this.onSelect})
       : super(key: key);
 
   @override
+  _MovieListContainerState createState() => _MovieListContainerState();
+}
+
+class _MovieListContainerState extends State<MovieListContainer> {
+  List<Widget> widgetsItem = [];
+
+  @override
+  void initState() {
+    super.initState();
+    for (var i = 0; i < widget.movieStack.movies.length; i++) {
+      
+        widgetsItem.add(
+          InkWell(
+            onTap: () => widget.onSelect(widget.movieStack.movies[i]),
+            child: MovieItem(movie: widget.movieStack.movies[i]),
+          ),
+        );
+      
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final movies = movieStack.movies;
     return AspectRatio(
-      aspectRatio: movieStack.sortBy == 'year' ? 16 / 14 : 16 / 10,
+      aspectRatio: widget.movieStack.sortBy == 'year' ? 16 / 14 : 16 / 10,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: movieStack.movies.length,
-        itemBuilder: (_, index) => InkWell(
-          onTap: () => onSelect(movies[index]),
-          child: MovieItem(movie: movies[index]),
-        ),
+        itemCount: widgetsItem.length,
+        itemBuilder: (_, index) => widgetsItem[index],
       ),
     );
   }
