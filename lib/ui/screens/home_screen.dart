@@ -1,6 +1,7 @@
 import 'package:abatime/models/Movie.dart';
 import 'package:abatime/models/core/entities/movie_stack.dart';
 import 'package:abatime/providers/genre_provider.dart';
+import 'package:abatime/ui/widgets/ads_widgets/native_ad_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
@@ -42,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ...movieStacks
               .map((movieObject) => _moviesDivision(movieObject, genre))
               .toList(),
+          
         ],
       ),
     );

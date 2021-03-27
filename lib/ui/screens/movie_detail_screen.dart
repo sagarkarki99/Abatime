@@ -168,6 +168,7 @@ class MovieDetailWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 image: NetworkImage(
                   movie.mediumCoverImage,
+
                 ),
               ),
             ),

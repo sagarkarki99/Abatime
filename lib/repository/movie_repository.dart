@@ -1,11 +1,13 @@
-import 'package:abatime/config/end_points.dart';
-import 'package:abatime/https/api_client.dart';
-import 'package:abatime/models/Movie.dart';
-import 'package:abatime/models/MovieResponse.dart';
-import 'package:abatime/models/MovieDetail.dart' as movieDetail;
 import 'package:dartz/dartz.dart';
+
+import '../config/end_points.dart';
+import '../https/api_client.dart';
+import '../models/Movie.dart';
+import '../models/MovieDetail.dart' as movieDetail;
+import '../models/MovieResponse.dart';
 import '../repository/local_database.dart' as localDb;
 import 'app_error.dart';
+import 'fake_movie_list.dart';
 
 class MovieRepository {
   Future<Either<AppError, List<Movie>>> getAllMovies(
@@ -26,6 +28,8 @@ class MovieRepository {
                 'order_by': 'dec'
               },
       );
+
+      //final Map<String, dynamic> data = _getDemoData(sortName);
       MovieResponse movieResponse = MovieResponse.fromJson(data);
       return Right(movieResponse.data.movies);
     } on HttpException catch (error) {
@@ -96,10 +100,12 @@ class MovieRepository {
   }
 
   removeFromWatchList(int id) async {
-  await localDb.delete(id,'movies_table');
+    await localDb.delete(id, 'movies_table');
   }
 
-  
+  Map<String, dynamic> _getDemoData(String sortName) {
+    return fakeMovies[sortName];
+  }
 }
 
 class DbMovie {

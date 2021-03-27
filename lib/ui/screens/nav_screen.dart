@@ -1,8 +1,8 @@
-import 'package:abatime/providers/all_providers.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/all_providers.dart';
 import '../widgets/widgets.dart';
 import 'screens.dart';
 
@@ -26,6 +26,7 @@ class _NavScreenState extends State<NavScreen> {
     ),
     SearchScreen(),
     WatchListScreen(),
+    // AdDemoScreen(),
   ];
 
   final List<BottomNavigationBarItem> _items = [
@@ -41,6 +42,10 @@ class _NavScreenState extends State<NavScreen> {
         icon: Icon(FluentIcons.list_24_regular),
         activeIcon: Icon(FluentIcons.list_24_filled),
         label: 'Watch List'),
+        // BottomNavigationBarItem(
+        // icon: Icon(FluentIcons.list_24_regular),
+        // activeIcon: Icon(FluentIcons.list_24_filled),
+        // label: 'Ad demo'),
   ];
 
   @override

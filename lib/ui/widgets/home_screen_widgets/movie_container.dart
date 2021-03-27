@@ -1,13 +1,12 @@
-import 'package:abatime/models/Movie.dart';
-import 'package:abatime/models/core/entities/movie_stack.dart';
-import 'package:abatime/providers/all_providers.dart';
-import 'package:abatime/shimmers/movie_list_shimmer.dart';
-import 'package:abatime/shimmers/shimmer_item.dart';
-import 'package:abatime/ui/widgets/ads_widgets/banner_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../models/Movie.dart';
+import '../../../models/core/entities/movie_stack.dart';
+import '../../../providers/all_providers.dart';
+import '../../../shimmers/movie_list_shimmer.dart';
+import '../ads_widgets/native_ad_widget.dart';
+import 'movie_item.dart';
 
 class MovieContainer extends StatefulWidget {
   final MovieStack movieStack;
@@ -81,14 +80,16 @@ class _MovieListContainerState extends State<MovieListContainer> {
   void initState() {
     super.initState();
     for (var i = 0; i < widget.movieStack.movies.length; i++) {
-      
+      if (i == 3 || i == 15) {
+        widgetsItem.add(NativeAdWidget());
+      } else {
         widgetsItem.add(
           InkWell(
             onTap: () => widget.onSelect(widget.movieStack.movies[i]),
             child: MovieItem(movie: widget.movieStack.movies[i]),
           ),
         );
-      
+      }
     }
   }
 
@@ -101,50 +102,6 @@ class _MovieListContainerState extends State<MovieListContainer> {
         itemCount: widgetsItem.length,
         itemBuilder: (_, index) => widgetsItem[index],
       ),
-    );
-  }
-}
-
-class MovieItem extends StatelessWidget {
-  const MovieItem({
-    Key key,
-    @required this.movie,
-  }) : super(key: key);
-
-  final Movie movie;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Expanded(
-          flex: 8,
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(8.0, 2.0, 0.0, 0.0),
-            child: CachedNetworkImage(
-              imageUrl: movie.mediumCoverImage ?? movie.largeCoverImage,
-              placeholder: (_, url) => ShimmerItem(),
-              fadeInDuration: Duration(milliseconds: 500),
-              fadeInCurve: Curves.bounceInOut,
-            ),
-          ),
-        ),
-        Expanded(
-            flex: 1,
-            child: Row(
-              children: [
-                Text(
-                  movie.rating.toString(),
-                ),
-                Icon(
-                  FluentIcons.star_24_filled,
-                  size: 18,
-                  color: Theme.of(context).accentColor,
-                ),
-              ],
-            )),
-      ],
     );
   }
 }
