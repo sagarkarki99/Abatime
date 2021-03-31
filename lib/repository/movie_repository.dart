@@ -29,7 +29,7 @@ class MovieRepository {
               },
       );
 
-      //final Map<String, dynamic> data = _getDemoData(sortName);
+      // final Map<String, dynamic> data = _getDemoData(sortName);
       MovieResponse movieResponse = MovieResponse.fromJson(data);
       return Right(movieResponse.data.movies);
     } on HttpException catch (error) {

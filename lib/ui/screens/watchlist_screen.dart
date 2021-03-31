@@ -1,4 +1,5 @@
 import 'package:abatime/providers/movies_provider.dart';
+import 'package:abatime/ui/ui_utils.dart/slide_transition_container.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,9 +25,11 @@ class WatchListScreen extends StatelessWidget {
               return CustomLoading();
             } else if (!snapshot.hasData) {
               return Center(
-                  child: CustomLabelWithIcon(
-                icon: FluentIcons.movies_and_tv_24_filled,
-                label: 'No Movies in Watch List.',
+                  child: SlideTransitionContainer(
+                child: CustomLabelWithIcon(
+                  icon: FluentIcons.movies_and_tv_24_filled,
+                  label: 'No Movies in Watch List.',
+                ),
               ));
             } else {
               return Container(

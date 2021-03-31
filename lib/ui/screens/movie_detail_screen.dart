@@ -109,7 +109,7 @@ class MovieDetailWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: MovieDescription(movie: movie),
           ),
-          BannerWidget(),
+          // BannerWidget(),
           movie.cast == null ? SizedBox() : CastContainer(casts: movie.cast),
           MovieContainer(
             genre: movie.genres[0],
