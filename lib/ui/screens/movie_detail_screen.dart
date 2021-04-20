@@ -1,18 +1,19 @@
 import 'dart:ui';
 
-import 'package:abatime/models/MovieDetail.dart';
-import 'package:abatime/models/core/entities/movie_stack.dart';
-import 'package:abatime/providers/detail_provider.dart';
-import 'package:abatime/shimmers/movie_detail_shimmer.dart';
-import 'package:abatime/ui/widgets/detail_screen_widget/download_container.dart';
-import 'package:abatime/ui/widgets/ads_widgets/banner_widget.dart';
-import 'package:abatime/ui/widgets/detail_screen_widget/movie_stat_info.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../../models/MovieDetail.dart';
+import '../../models/core/entities/movie_stack.dart';
+import '../../providers/all_providers.dart';
+import '../../routes.dart';
+import '../../shimmers/movie_detail_shimmer.dart';
+import '../ui_utils.dart/slide_transition_container.dart';
 import '../widgets/detail_screen_widget/content_header.dart';
+import '../widgets/detail_screen_widget/download_container.dart';
+import '../widgets/detail_screen_widget/movie_stat_info.dart';
 import '../widgets/widgets.dart';
 
 class MovieDetailScreen extends StatelessWidget {
@@ -23,17 +24,20 @@ class MovieDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: Provider.of<DetailProvider>(context, listen: false)
+        future: Provider.of<MovieProvider>(context, listen: false)
             .fetchMovieDetailWith(movieId.toString()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return MovieDetailShimmer();
-          } else if (snapshot.error != null) {
-            return Center(
-              child: Text('Failed to load!'),
+          } else if (snapshot.hasError) {
+            return SlideTransitionContainer(
+              child: CustomLabelWithIcon(
+                icon: FluentIcons.error_circle_24_filled,
+                label: snapshot.error,
+              ),
             );
           } else {
-            return MovieDetailWidget();
+            return MovieDetailWidget(movie: snapshot.data as Movie);
           }
         },
       ),
@@ -42,11 +46,13 @@ class MovieDetailScreen extends StatelessWidget {
 }
 
 class MovieDetailWidget extends StatelessWidget {
+  final Movie movie;
+
+  const MovieDetailWidget({Key key, this.movie}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final scaffoldContext = Scaffold.of(context);
-    final movieProvider = Provider.of<DetailProvider>(context);
-    final movie = movieProvider.detailMovie;
+    final movieProvider = Provider.of<MovieProvider>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -118,9 +124,9 @@ class MovieDetailWidget extends StatelessWidget {
               stackName: 'Similar Movies',
             ),
             onMovieSelect: (movie) {
-              context
-                  .read<DetailProvider>()
-                  .fetchMovieDetailWith(movie.id.toString());
+              Navigator.of(context).pushReplacementNamed(
+                  Routes.movieDetailScreen,
+                  arguments: movie.id);
             },
           ),
         ],
@@ -140,7 +146,6 @@ class MovieDetailWidget extends StatelessWidget {
                 autoPlay: true,
                 mute: false,
                 forceHD: true,
-
               ),
             ),
             thumbnail: Image.network(movie.mediumCoverImage),
@@ -168,7 +173,6 @@ class MovieDetailWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 image: NetworkImage(
                   movie.mediumCoverImage,
-
                 ),
               ),
             ),

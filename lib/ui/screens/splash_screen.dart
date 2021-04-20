@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -6,7 +7,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-          body: Center(
+      body: Center(
         child: Shimmer.fromColors(
           baseColor: Colors.black,
           highlightColor: Colors.white,
@@ -17,7 +18,7 @@ class SplashScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                Icons.tv_rounded,
+                FluentIcons.tv_48_regular,
                 size: 62,
               ),
               Text(
@@ -25,6 +26,7 @@ class SplashScreen extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 32,
+                  letterSpacing: 1.5,
                 ),
               ),
             ],

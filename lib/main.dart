@@ -27,19 +27,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: MovieProvider(),
-      child: Platform.isIOS
-          ? CupertinoApp()
-          : MaterialApp(
-              title: 'Aba Time',
-              debugShowCheckedModeBanner: false,
-              theme: MyTheme.customTheme(),
-              home: NavScreen(),
-              onGenerateRoute: Routes.onGenerateRoute,
-            ),
-    );
-    FutureBuilder(
+    return FutureBuilder(
         future: Future.delayed(
           Duration(
             seconds: 3,

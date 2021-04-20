@@ -53,7 +53,9 @@ class MyTheme {
           headline6: baseTextTheme.headline6.copyWith(
             fontSize: 18.0,
           ),
-          headline4: GoogleFonts.satisfy().copyWith(color: Colors.white),
+          headline4: TextStyle(
+            fontFamily: 'Satisfy',
+          ),
           caption: baseTextTheme.caption.copyWith(
             fontWeight: FontWeight.w400,
           ),

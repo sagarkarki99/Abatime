@@ -25,16 +25,16 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
               factoryId: 'nativeAd',
               listener: AdListener(
                 onAdLoaded: (ad) {
-                  print('Ad loaded');
+                  
                   setState(() {
                     isAdLoaded = true;
                   });
                 },
                 onAdClosed: (ad) {
-                  print('ad closed');
+                  
                 },
                 onAdFailedToLoad: (ad, error) {
-                  print('ad failed to load');
+                  
                   ad.dispose();
                 },
               ),
