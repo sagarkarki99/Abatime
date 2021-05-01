@@ -7,6 +7,7 @@ import 'package:abatime/ui/screens/screens.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ import 'routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final initFuture = MobileAds.instance.initialize();
   final adManager = AdManager(initFuture);
   runApp(

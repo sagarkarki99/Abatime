@@ -15,6 +15,7 @@ import '../widgets/detail_screen_widget/content_header.dart';
 import '../widgets/detail_screen_widget/download_container.dart';
 import '../widgets/detail_screen_widget/movie_stat_info.dart';
 import '../widgets/widgets.dart';
+import '../widgets/ads_widgets/banner_widget.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final String movieId;
@@ -115,7 +116,7 @@ class MovieDetailWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: MovieDescription(movie: movie),
           ),
-          // BannerWidget(),
+           BannerWidget(),
           movie.cast == null ? SizedBox() : CastContainer(casts: movie.cast),
           MovieContainer(
             genre: movie.genres[0],
