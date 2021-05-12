@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -75,21 +77,37 @@ class MovieListContainer extends StatefulWidget {
 
 class _MovieListContainerState extends State<MovieListContainer> {
   List<Widget> widgetsItem = [];
+  int firstAdIndex = 3;
+  int secondAdIndex = 12;
+  int thirdAdIndex = 18;
 
   @override
   void initState() {
     super.initState();
-    for (var i = 0; i < widget.movieStack.movies.length; i++) {
-      if (i == 3 || i == 15) {
+    for (var i = 0; i < widget.movieStack.movies.length + 3; i++) {
+      if (i == firstAdIndex || i == secondAdIndex || i == thirdAdIndex) {
         widgetsItem.add(NativeAdWidget());
       } else {
+        final movie = widget.movieStack.movies[_getItemIndex(i)];
         widgetsItem.add(
           InkWell(
-            onTap: () => widget.onSelect(widget.movieStack.movies[i]),
-            child: MovieItem(movie: widget.movieStack.movies[i]),
+            onTap: () => widget.onSelect(movie),
+            child: MovieItem(movie: movie),
           ),
         );
       }
+    }
+  }
+
+  int _getItemIndex(int rawIndex) {
+    if (rawIndex >= thirdAdIndex) {
+      return rawIndex - 3;
+    } else if (rawIndex >= secondAdIndex) {
+      return rawIndex - 2;
+    } else if (rawIndex >= firstAdIndex) {
+      return rawIndex - 1;
+    } else {
+      return rawIndex;
     }
   }
 

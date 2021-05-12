@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 class CustomListItem extends StatelessWidget {
@@ -42,8 +43,31 @@ class CustomListItem extends StatelessWidget {
               .caption
               .copyWith(color: Colors.white60, letterSpacing: 1.0),
         ),
-        trailing: Text(trailingItem.toString()),
+        trailing: Rating(rating: trailingItem.toString()),
         onTap: () => onTap(),
+      ),
+    );
+  }
+}
+
+class Rating extends StatelessWidget {
+  final String rating;
+
+  const Rating({Key key, this.rating}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(rating),
+          SizedBox(width: 4.0),
+          Icon(
+            FluentIcons.star_16_filled,
+            color: Theme.of(context).accentColor,
+            size: 18.0,
+          ),
+        ],
       ),
     );
   }

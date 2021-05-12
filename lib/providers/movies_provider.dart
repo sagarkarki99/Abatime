@@ -31,16 +31,12 @@ class MovieProvider extends BaseProvider {
   }
 
   Future<void> fetchMovieDetailWith(String id) async {
-    Either<AppError, movieDetail.Movie> eitherResult =
-        await _movieRepository.getMovieDetailWith(id);
-
-    eitherResult.fold((AppError appError) {
-      setErrorMessage(appError.toString());
-      setUiState(ViewState.WITHERROR);
-    }, (movieDetail.Movie movie) {
-      _detailMovie = movie;
-      setUiState(ViewState.WITHDATA);
-    });
+    try {
+      movieDetail.Movie movie = await _movieRepository.getMovieDetailWith(id);
+      return Future.value(movie);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
   }
 
   Future<void> searchMovieApi(String query) async {

@@ -29,7 +29,7 @@ class MovieRepository {
               },
       );
 
-      //final Map<String, dynamic> data = _getDemoData(sortName);
+      // final Map<String, dynamic> data = _getDemoData(sortName);
       MovieResponse movieResponse = MovieResponse.fromJson(data);
       return Right(movieResponse.data.movies);
     } on HttpException catch (error) {
@@ -37,8 +37,7 @@ class MovieRepository {
     }
   }
 
-  Future<Either<AppError, movieDetail.Movie>> getMovieDetailWith(
-      String id) async {
+  Future<movieDetail.Movie> getMovieDetailWith(String id) async {
     try {
       final response = await ApiClient.getInstance().get(MOVIE_DETAIL, {
         'movie_id': id,
@@ -47,9 +46,9 @@ class MovieRepository {
       });
       movieDetail.MovieDetail detail =
           movieDetail.MovieDetail.fromJson(response);
-      return Right(detail.data.movie);
+      return detail.data.movie;
     } catch (error) {
-      return Left(AppError(error.toString()));
+      throw AppError(error.toString());
     }
   }
 
