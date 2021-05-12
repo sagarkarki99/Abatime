@@ -43,7 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ...movieStacks
               .map((movieObject) => _moviesDivision(movieObject, genre))
               .toList(),
-          
         ],
       ),
     );

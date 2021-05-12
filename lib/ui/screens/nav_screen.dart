@@ -26,7 +26,6 @@ class _NavScreenState extends State<NavScreen> {
     ),
     SearchScreen(),
     WatchListScreen(),
-    // AdDemoScreen(),
   ];
 
   final List<BottomNavigationBarItem> _items = [
@@ -42,10 +41,6 @@ class _NavScreenState extends State<NavScreen> {
         icon: Icon(FluentIcons.list_24_regular),
         activeIcon: Icon(FluentIcons.list_24_filled),
         label: 'Watch List'),
-        // BottomNavigationBarItem(
-        // icon: Icon(FluentIcons.list_24_regular),
-        // activeIcon: Icon(FluentIcons.list_24_filled),
-        // label: 'Ad demo'),
   ];
 
   @override
