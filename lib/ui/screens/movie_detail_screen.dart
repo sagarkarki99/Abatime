@@ -220,7 +220,7 @@ class MovieDetailWidget extends StatelessWidget {
                   color: Theme.of(context).accentColor,
                 ),
                 label: Text(
-                  'Get Torrent',
+                  'Download',
                   style: TextStyle(color: Theme.of(context).accentColor),
                 ),
                 onPressed: () {
