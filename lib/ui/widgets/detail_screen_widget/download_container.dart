@@ -1,4 +1,3 @@
-
 import 'package:abatime/config/utils/torrent_manager.dart';
 import 'package:abatime/models/MovieDetail.dart';
 import 'package:android_intent/android_intent.dart';
@@ -95,8 +94,70 @@ class _DownloadContainerState extends State<DownloadContainer> {
       );
       await intent.launch();
     } else {
-      await url.launch(
-          'https://play.google.com/store/apps/details?id=com.bittorrent.client&hl=en&gl=US');
+      showDialog(
+          context: context, builder: (context) => _AnimatedAlertDialog());
     }
+  }
+}
+
+class _AnimatedAlertDialog extends StatefulWidget {
+  const _AnimatedAlertDialog({Key key}) : super(key: key);
+
+  @override
+  __AnimatedAlertDialogState createState() => __AnimatedAlertDialogState();
+}
+
+class __AnimatedAlertDialogState extends State<_AnimatedAlertDialog>
+    with SingleTickerProviderStateMixin {
+  AnimationController animationController;
+  Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
+    animation = CurvedAnimation(
+      curve: Curves.elasticOut,
+      parent: animationController,
+    );
+    animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: animation,
+      child: AlertDialog(
+        title: Text(
+          'No Torrent client Found!',
+          style: Theme.of(context)
+              .textTheme
+              .headline6
+              .copyWith(color: Theme.of(context).errorColor),
+        ),
+        content: Text(
+            'Please install Bittorrent or Utoreent from play store to download movies.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (animationController.isCompleted) {
+                animationController.reverse();
+              }
+              Navigator.of(context).pop();
+            },
+            child: Text('Okay'),
+          ),
+        ],
+      ),
+    );
   }
 }

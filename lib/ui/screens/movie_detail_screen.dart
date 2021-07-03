@@ -56,6 +56,7 @@ class MovieDetailWidget extends StatelessWidget {
     final movieProvider = Provider.of<MovieProvider>(context);
 
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
