@@ -24,15 +24,15 @@ class _DownloadContainerState extends State<DownloadContainer> {
           topRight: Radius.circular(18.0),
         ),
       ),
-      child: widget.movie.torrents.length == 1
-          ? _downloadSide(context, widget.movie.torrents[0])
+      child: widget.movie.torrents!.length == 1
+          ? _downloadSide(context, widget.movie.torrents![0])
           : Row(
               children: [
-                _downloadSide(context, widget.movie.torrents[0]),
+                _downloadSide(context, widget.movie.torrents![0]),
                 VerticalDivider(
                   color: Colors.black,
                 ),
-                _downloadSide(context, widget.movie.torrents[1]),
+                _downloadSide(context, widget.movie.torrents![1]),
               ],
             ),
     );
@@ -59,7 +59,7 @@ class _DownloadContainerState extends State<DownloadContainer> {
               Icon(Icons.tv, size: 42, color: Colors.grey),
               Text(
                 '${torrent.quality}',
-                style: Theme.of(context).textTheme.headline5.copyWith(
+                style: Theme.of(context).textTheme.headline5!.copyWith(
                       letterSpacing: 2.0,
                       color: Colors.grey,
                     ),
@@ -67,14 +67,14 @@ class _DownloadContainerState extends State<DownloadContainer> {
               SizedBox(height: 8.0),
               Text(
                 '${torrent.type}',
-                style: Theme.of(context).textTheme.headline6.copyWith(
+                style: Theme.of(context).textTheme.headline6!.copyWith(
                       letterSpacing: 2.0,
                     ),
               ),
               SizedBox(height: 4.0),
               Text(
                 '${torrent.size}',
-                style: Theme.of(context).textTheme.caption.copyWith(
+                style: Theme.of(context).textTheme.caption!.copyWith(
                       color: Colors.grey,
                     ),
               ),
@@ -101,7 +101,7 @@ class _DownloadContainerState extends State<DownloadContainer> {
 }
 
 class _AnimatedAlertDialog extends StatefulWidget {
-  const _AnimatedAlertDialog({Key key}) : super(key: key);
+  const _AnimatedAlertDialog({Key? key}) : super(key: key);
 
   @override
   __AnimatedAlertDialogState createState() => __AnimatedAlertDialogState();
@@ -109,8 +109,8 @@ class _AnimatedAlertDialog extends StatefulWidget {
 
 class __AnimatedAlertDialogState extends State<_AnimatedAlertDialog>
     with SingleTickerProviderStateMixin {
-  AnimationController animationController;
-  Animation<double> animation;
+  late AnimationController animationController;
+  late Animation<double> animation;
 
   @override
   void initState() {
@@ -141,7 +141,7 @@ class __AnimatedAlertDialogState extends State<_AnimatedAlertDialog>
           'No Torrent client Found!',
           style: Theme.of(context)
               .textTheme
-              .headline6
+              .headline6!
               .copyWith(color: Theme.of(context).errorColor),
         ),
         content: Text(

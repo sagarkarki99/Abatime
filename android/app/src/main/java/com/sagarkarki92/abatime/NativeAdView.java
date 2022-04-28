@@ -6,25 +6,25 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
-import com.google.android.gms.ads.formats.UnifiedNativeAdView;
+import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAdView;
 
 import io.flutter.plugins.googlemobileads.GoogleMobileAdsPlugin.NativeAdFactory;
 
 import java.util.Map;
 
-class NativeAdView implements NativeAdFactory {
+class CustomNativeAdView implements NativeAdFactory {
     private final LayoutInflater layoutInflater;
 
-    NativeAdView(LayoutInflater layoutInflater) {
+    CustomNativeAdView(LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
     }
 
     @Override
-    public UnifiedNativeAdView createNativeAd(
-            UnifiedNativeAd nativeAd, Map<String, Object> customOptions) {
-        final UnifiedNativeAdView adView =
-                (UnifiedNativeAdView) layoutInflater.inflate(R.layout.native_ad, null);
+    public NativeAdView createNativeAd(
+           NativeAd nativeAd, Map<String, Object> customOptions) {
+        final NativeAdView adView =
+                (NativeAdView) layoutInflater.inflate(R.layout.native_ad, null);
         // final TextView headlineView = adView.findViewById(R.id.ad_headline);
         final ImageView imageView = adView.findViewById(R.id.ad_image);
         // headlineView.setText(nativeAd.getHeadline());

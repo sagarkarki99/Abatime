@@ -1,8 +1,8 @@
 class MovieDetail {
-  String status;
-  String statusMessage;
-  Data data;
-  Meta meta;
+  String? status;
+  String? statusMessage;
+  Data? data;
+  Meta? meta;
 
   MovieDetail({this.status, this.statusMessage, this.data, this.meta});
 
@@ -18,17 +18,17 @@ class MovieDetail {
     data['status'] = this.status;
     data['status_message'] = this.statusMessage;
     if (this.data != null) {
-      data['data'] = this.data.toJson();
+      data['data'] = this.data!.toJson();
     }
     if (this.meta != null) {
-      data['@meta'] = this.meta.toJson();
+      data['@meta'] = this.meta!.toJson();
     }
     return data;
   }
 }
 
 class Data {
-  Movie movie;
+  Movie? movie;
 
   Data({this.movie});
 
@@ -39,46 +39,46 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.movie != null) {
-      data['movie'] = this.movie.toJson();
+      data['movie'] = this.movie!.toJson();
     }
     return data;
   }
 }
 
 class Movie {
-  int id;
-  String url;
-  String imdbCode;
-  String title;
-  String titleEnglish;
-  String titleLong;
-  String slug;
-  int year;
-  num rating;
-  int runtime;
-  List<String> genres;
-  int downloadCount;
-  int likeCount;
-  String descriptionIntro;
-  String descriptionFull;
-  String ytTrailerCode;
-  String language;
-  String mpaRating;
-  String backgroundImage;
-  String backgroundImageOriginal;
-  String smallCoverImage;
-  String mediumCoverImage;
-  String largeCoverImage;
-  String mediumScreenshotImage1;
-  String mediumScreenshotImage2;
-  String mediumScreenshotImage3;
-  String largeScreenshotImage1;
-  String largeScreenshotImage2;
-  String largeScreenshotImage3;
-  List<Cast> cast;
-  List<Torrents> torrents;
-  String dateUploaded;
-  int dateUploadedUnix;
+  int? id;
+  String? url;
+  String? imdbCode;
+  String? title;
+  String? titleEnglish;
+  String? titleLong;
+  String? slug;
+  int? year;
+  num? rating;
+  int? runtime;
+  List<String>? genres;
+  int? downloadCount;
+  int? likeCount;
+  String? descriptionIntro;
+  String? descriptionFull;
+  String? ytTrailerCode;
+  String? language;
+  String? mpaRating;
+  String? backgroundImage;
+  String? backgroundImageOriginal;
+  String? smallCoverImage;
+  String? mediumCoverImage;
+  String? largeCoverImage;
+  String? mediumScreenshotImage1;
+  String? mediumScreenshotImage2;
+  String? mediumScreenshotImage3;
+  String? largeScreenshotImage1;
+  String? largeScreenshotImage2;
+  String? largeScreenshotImage3;
+  List<Cast>? cast;
+  List<Torrents>? torrents;
+  String? dateUploaded;
+  int? dateUploadedUnix;
 
   Movie(
       {this.id,
@@ -146,15 +146,15 @@ class Movie {
     largeScreenshotImage2 = json['large_screenshot_image2'];
     largeScreenshotImage3 = json['large_screenshot_image3'];
     if (json['cast'] != null) {
-      cast = new List<Cast>();
+      cast = <Cast>[];
       json['cast'].forEach((v) {
-        cast.add(new Cast.fromJson(v));
+        cast!.add(new Cast.fromJson(v));
       });
     }
     if (json['torrents'] != null) {
-      torrents = new List<Torrents>();
+      torrents = <Torrents>[];
       json['torrents'].forEach((v) {
-        torrents.add(new Torrents.fromJson(v));
+        torrents!.add(new Torrents.fromJson(v));
       });
     }
     dateUploaded = json['date_uploaded'];
@@ -193,10 +193,10 @@ class Movie {
     data['large_screenshot_image2'] = this.largeScreenshotImage2;
     data['large_screenshot_image3'] = this.largeScreenshotImage3;
     if (this.cast != null) {
-      data['cast'] = this.cast.map((v) => v.toJson()).toList();
+      data['cast'] = this.cast!.map((v) => v.toJson()).toList();
     }
     if (this.torrents != null) {
-      data['torrents'] = this.torrents.map((v) => v.toJson()).toList();
+      data['torrents'] = this.torrents!.map((v) => v.toJson()).toList();
     }
     data['date_uploaded'] = this.dateUploaded;
     data['date_uploaded_unix'] = this.dateUploadedUnix;
@@ -205,18 +205,17 @@ class Movie {
 }
 
 class Cast {
-  String name;
-  String characterName;
-  String urlSmallImage;
-  String imdbCode;
+  String? name;
+  String? characterName;
+  String? urlSmallImage;
+  String? imdbCode;
 
   Cast({this.name, this.characterName, this.urlSmallImage, this.imdbCode});
 
   Cast.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     characterName = json['character_name'];
-    urlSmallImage = json['url_small_image'] ??
-        'https://icon-library.com/images/no-user-image-icon/no-user-image-icon-23.jpg';
+    urlSmallImage = json['url_small_image'];
     imdbCode = json['imdb_code'];
   }
 
@@ -231,16 +230,16 @@ class Cast {
 }
 
 class Torrents {
-  String url;
-  String hash;
-  String quality;
-  String type;
-  int seeds;
-  int peers;
-  String size;
-  int sizeBytes;
-  String dateUploaded;
-  int dateUploadedUnix;
+  String? url;
+  String? hash;
+  String? quality;
+  String? type;
+  int? seeds;
+  int? peers;
+  String? size;
+  int? sizeBytes;
+  String? dateUploaded;
+  int? dateUploadedUnix;
 
   Torrents(
       {this.url,
@@ -284,10 +283,10 @@ class Torrents {
 }
 
 class Meta {
-  int serverTime;
-  String serverTimezone;
-  int apiVersion;
-  String executionTime;
+  int? serverTime;
+  String? serverTimezone;
+  int? apiVersion;
+  String? executionTime;
 
   Meta(
       {this.serverTime,

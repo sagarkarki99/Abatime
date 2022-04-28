@@ -1,54 +1,55 @@
 class Movie {
-  int id;
-  String url;
-  String imdbCode;
-  String title;
-  String titleEnglish;
-  String titleLong;
-  String slug;
-  int year;
-  num rating;
-  int runtime;
-  List<dynamic> genres;
-  String summary;
-  String descriptionFull;
-  String synopsis;
-  String ytTrailerCode;
-  String language;
-  String mpaRating;
-  String backgroundImage;
-  String backgroundImageOriginal;
-  String smallCoverImage;
-  String mediumCoverImage;
-  String largeCoverImage;
-  String state;
-  List<Torrents> torrents;
+  int? id;
+  String? url;
+  String? imdbCode;
+  String? title;
+  String? titleEnglish;
+  String? titleLong;
+  String? slug;
+  int? year;
+  num? rating;
+  int? runtime;
+  List<dynamic>? genres;
+  String? summary;
+  String? descriptionFull;
+  String? synopsis;
+  String? ytTrailerCode;
+  String? language;
+  String? mpaRating;
+  String? backgroundImage;
+  String? backgroundImageOriginal;
+  String? smallCoverImage;
+  String? mediumCoverImage;
+  String? largeCoverImage;
+  String? state;
+  List<Torrents>? torrents;
 
-  Movie(
-      {this.id,
-      this.url,
-      this.imdbCode,
-      this.title,
-      this.titleEnglish,
-      this.titleLong,
-      this.slug,
-      this.year,
-      this.rating,
-      this.runtime,
-      this.genres,
-      this.summary,
-      this.descriptionFull,
-      this.synopsis,
-      this.ytTrailerCode,
-      this.language,
-      this.mpaRating,
-      this.backgroundImage,
-      this.backgroundImageOriginal,
-      this.smallCoverImage,
-      this.mediumCoverImage,
-      this.largeCoverImage,
-      this.state,
-      this.torrents});
+  Movie({
+    this.id,
+    this.url,
+    this.imdbCode,
+    this.title,
+    this.titleEnglish,
+    this.titleLong,
+    this.slug,
+    this.year,
+    this.rating,
+    this.runtime,
+    this.genres,
+    this.summary,
+    this.descriptionFull,
+    this.synopsis,
+    this.ytTrailerCode,
+    this.language,
+    this.mpaRating,
+    this.backgroundImage,
+    this.backgroundImageOriginal,
+    this.smallCoverImage,
+    this.mediumCoverImage,
+    this.largeCoverImage,
+    this.state,
+    this.torrents = const [],
+  });
 
   Movie.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -74,13 +75,20 @@ class Movie {
     mediumCoverImage = json['medium_cover_image'];
     largeCoverImage = json['large_cover_image'];
     state = json['state'];
-    if (json['torrents'] != null) {
-      torrents = new List<Torrents>();
-      json['torrents'].forEach((v) {
-        torrents.add(new Torrents.fromJson(v));
-      });
-    }
+    torrents = (json['torrents'] as List<dynamic>)
+        .map((e) => Torrents.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
+
+  // List<Torrents> _getTorrents(Map<String, dynamic> json) {
+  //   final torrents = <Torrents>[];
+  //   if (json['torrents'] != null) {
+  //     json['torrents'].forEach((v) {
+  //       torrents.add(new Torrents.fromJson(v));
+  //     });
+  //   }
+  //   return torrents;
+  // }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -107,24 +115,24 @@ class Movie {
     data['medium_cover_image'] = this.mediumCoverImage;
     data['large_cover_image'] = this.largeCoverImage;
     data['state'] = this.state;
-    if (this.torrents != null) {
-      data['torrents'] = this.torrents.map((v) => v.toJson()).toList();
-    }
+
+    data['torrents'] = this.torrents?.map((v) => v.toJson()).toList() ?? [];
+
     return data;
   }
 }
 
 class Torrents {
-  String url;
-  String hash;
-  String quality;
-  String type;
-  int seeds;
-  int peers;
-  String size;
-  int sizeBytes;
-  String dateUploaded;
-  int dateUploadedUnix;
+  String? url;
+  String? hash;
+  String? quality;
+  String? type;
+  int? seeds;
+  int? peers;
+  String? size;
+  int? sizeBytes;
+  String? dateUploaded;
+  int? dateUploadedUnix;
 
   Torrents(
       {this.url,

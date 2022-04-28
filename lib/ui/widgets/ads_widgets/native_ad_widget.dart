@@ -11,7 +11,7 @@ class NativeAdWidget extends StatefulWidget {
 }
 
 class _NativeAdWidgetState extends State<NativeAdWidget> {
-  NativeAd nativeAd;
+  NativeAd? nativeAd;
   bool isAdLoaded = false;
 
   @override
@@ -23,18 +23,14 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
             nativeAd = NativeAd(
               adUnitId: adManager.nativeAdUnitId,
               factoryId: 'nativeAd',
-              listener: AdListener(
+              listener: NativeAdListener(
                 onAdLoaded: (ad) {
-                  
                   setState(() {
                     isAdLoaded = true;
                   });
                 },
-                onAdClosed: (ad) {
-                  
-                },
+                onAdClosed: (ad) {},
                 onAdFailedToLoad: (ad, error) {
-                  
                   ad.dispose();
                 },
               ),
@@ -62,7 +58,7 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
                 child: Container(
                   width: 170,
                   padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: AdWidget(ad: nativeAd),
+                  child: AdWidget(ad: nativeAd!),
                 ),
               ),
               Expanded(

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class ContentHeader extends StatelessWidget {
-  final String sc1;
-  final String sc2;
-  final String sc3;
+  final String? sc1;
+  final String? sc2;
+  final String? sc3;
 
-  final Widget child;
+  final Widget? child;
 
-  const ContentHeader({Key key, this.child, this.sc1, this.sc2, this.sc3})
+  const ContentHeader({Key? key, this.child, this.sc1, this.sc2, this.sc3})
       : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class ContentHeader extends StatelessWidget {
         Positioned(
           left: 0.0,
           bottom: 30.0,
-          child: child,
+          child: child!,
         ),
       ],
     );
@@ -39,16 +39,16 @@ class ContentHeader extends StatelessWidget {
 }
 
 class BgImage extends StatelessWidget {
-  final String featuredImage;
+  final String? featuredImage;
 
-  BgImage({Key key, this.featuredImage}) : super(key: key);
+  BgImage({Key? key, this.featuredImage}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fill,
-          image: NetworkImage(featuredImage),
+          image: NetworkImage(featuredImage!),
         ),
         color: Colors.black,
       ),

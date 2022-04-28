@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomChip extends StatefulWidget {
-  final String label;
-  final Color color;
+  final String? label;
+  final Color? color;
 
-  const CustomChip({Key key, this.label, this.color}) : super(key: key);
+  const CustomChip({Key? key, this.label, this.color}) : super(key: key);
 
   @override
   _CustomChipState createState() => _CustomChipState();
@@ -12,7 +12,7 @@ class CustomChip extends StatefulWidget {
 
 class _CustomChipState extends State<CustomChip>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   @override
   void initState() {
@@ -40,13 +40,13 @@ class _CustomChipState extends State<CustomChip>
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             border: Border.all(
-              color: widget.color,
+              color: widget.color!,
               width: 1.0,
             ),
             borderRadius: BorderRadius.circular(16)),
         child: Text(
           '${widget.label}',
-          style: Theme.of(context).textTheme.caption.copyWith(
+          style: Theme.of(context).textTheme.caption!.copyWith(
                 letterSpacing: 2.0,
                 color: widget.color,
               ),

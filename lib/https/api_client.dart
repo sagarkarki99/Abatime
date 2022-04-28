@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class ApiClient {
-  static ApiClient instance;
+  static ApiClient? instance;
   static const _baseUrl = 'https://yts.mx/api/v2';
   static ApiClient getInstance() => ApiClient();
 
@@ -20,19 +20,19 @@ class ApiClient {
 }
 
 class HttpException implements Exception {
-  String errorMessage;
+  String? errorMessage;
 
   @override
   String toString() {
-    return errorMessage;
+    return errorMessage!;
   }
 
   HttpException.dioError(DioError error) {
     switch (error.type) {
-      case DioErrorType.RESPONSE:
-        errorMessage = error.response.data;
+      case DioErrorType.response:
+        errorMessage = error.response!.data;
         break;
-      case DioErrorType.SEND_TIMEOUT:
+      case DioErrorType.sendTimeout:
         errorMessage = "Connection Time out!";
         break;
       default:

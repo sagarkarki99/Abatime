@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FadeTransitionContainer extends StatefulWidget {
-  Widget child;
+  Widget? child;
 
   FadeTransitionContainer({this.child});
 
@@ -12,7 +12,7 @@ class FadeTransitionContainer extends StatefulWidget {
 
 class _FadeTransitionContainerState extends State<FadeTransitionContainer>
     with SingleTickerProviderStateMixin {
-  AnimationController animationController;
+  late AnimationController animationController;
   @override
   void initState() {
     super.initState();

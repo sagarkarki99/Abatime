@@ -9,18 +9,18 @@ import 'base_provider.dart';
 
 class MovieProvider extends BaseProvider {
   MovieRepository _movieRepository = MovieRepository();
-  movieDetail.Movie _detailMovie;
+  movieDetail.Movie? _detailMovie;
   List<Movie> _movies = [];
-  List<Movie> _searchedMovies = [];
+  List<Movie>? _searchedMovies = [];
   Map<String, List<Movie>> _allMovies = {};
 
 //exposing to UI
   List<Movie> get allMovies => [..._movies];
-  List<Movie> get allSearchedMovies => [..._searchedMovies];
-  movieDetail.Movie get getMovieDetail => _detailMovie;
+  List<Movie> get allSearchedMovies => [..._searchedMovies!];
+  movieDetail.Movie? get getMovieDetail => _detailMovie;
   Map<String, List<Movie>> get moviesMap => {..._allMovies};
 
-  Future<void> fetchMovies(MovieStack _movieStack, String genre) async {
+  Future<void> fetchMovies(MovieStack _movieStack, String? genre) async {
     // setUiState(ViewState.LOADING);
 
     try {
@@ -32,7 +32,7 @@ class MovieProvider extends BaseProvider {
 
   Future<void> fetchMovieDetailWith(String id) async {
     try {
-      movieDetail.Movie movie = await _movieRepository.getMovieDetailWith(id);
+      movieDetail.Movie? movie = await _movieRepository.getMovieDetailWith(id);
       return Future.value(movie);
     } catch (e) {
       return Future.error(e.toString());
@@ -41,7 +41,7 @@ class MovieProvider extends BaseProvider {
 
   Future<void> searchMovieApi(String query) async {
     setUiState(ViewState.LOADING);
-    Either<AppError, List<Movie>> eitherResult =
+    Either<AppError, List<Movie>?> eitherResult =
         await _movieRepository.getSearchedMoviesWith(query);
     eitherResult.fold((appError) {
       setErrorMessage(appError.toString());
@@ -56,7 +56,7 @@ class MovieProvider extends BaseProvider {
     await _movieRepository.addToWatchList(movie);
   }
 
-  Future<List<DbMovie>> getAllWatchList() async {
+  Future<List<DbMovie>?> getAllWatchList() async {
     List<DbMovie> watchListMovies = await _movieRepository.getAllWatchList();
     if (watchListMovies.isEmpty) {
       return null;
@@ -64,7 +64,7 @@ class MovieProvider extends BaseProvider {
     return watchListMovies;
   }
 
-  Future<void> deleteItem(int id) async {
+  Future<void> deleteItem(int? id) async {
     await _movieRepository.removeFromWatchList(id);
     setUiState(ViewState.WITHDATA);
   }

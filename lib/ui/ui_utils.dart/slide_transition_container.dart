@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SlideTransitionContainer extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
 
   const SlideTransitionContainer({
-    Key key,
+    Key? key,
     this.child,
   }) : super(key: key);
 
@@ -15,7 +15,7 @@ class SlideTransitionContainer extends StatefulWidget {
 
 class _SlideTransitionContainerState extends State<SlideTransitionContainer>
     with TickerProviderStateMixin {
-  AnimationController animationController;
+  late AnimationController animationController;
   @override
   void initState() {
     super.initState();

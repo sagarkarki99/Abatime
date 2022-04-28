@@ -7,8 +7,8 @@ import '../../../shimmers/shimmer_item.dart';
 
 class MovieItem extends StatelessWidget {
   const MovieItem({
-    Key key,
-    @required this.movie,
+    Key? key,
+    required this.movie,
   }) : super(key: key);
 
   final Movie movie;
@@ -23,7 +23,7 @@ class MovieItem extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.fromLTRB(8.0, 2.0, 0.0, 0.0),
             child: CachedNetworkImage(
-              imageUrl: movie.mediumCoverImage ?? movie.largeCoverImage,
+              imageUrl: movie.mediumCoverImage ?? movie.largeCoverImage!,
               placeholder: (_, url) => ShimmerItem(),
               fadeInDuration: Duration(milliseconds: 500),
               fadeInCurve: Curves.bounceInOut,
@@ -40,7 +40,7 @@ class MovieItem extends StatelessWidget {
                 Icon(
                   FluentIcons.star_24_filled,
                   size: 18,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ],
             )),

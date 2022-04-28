@@ -7,7 +7,7 @@ import '../widgets/widgets.dart';
 import 'screens.dart';
 
 class NavScreen extends StatefulWidget {
-  NavScreen({Key key}) : super(key: key);
+  NavScreen({Key? key}) : super(key: key);
 
   @override
   _NavScreenState createState() => _NavScreenState();
@@ -25,6 +25,7 @@ class _NavScreenState extends State<NavScreen> {
       ),
     ),
     SearchScreen(),
+    // TvShowScreen(),
     WatchListScreen(),
   ];
 

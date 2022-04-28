@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +17,7 @@ import '../widgets/ads_widgets/banner_widget.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final String movieId;
-  const MovieDetailScreen(this.movieId, {Key key}) : super(key: key);
+  const MovieDetailScreen(this.movieId, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +32,11 @@ class MovieDetailScreen extends StatelessWidget {
             return SlideTransitionContainer(
               child: CustomLabelWithIcon(
                 icon: FluentIcons.error_circle_24_filled,
-                label: snapshot.error,
+                label: snapshot.error as String?,
               ),
             );
           } else {
-            return MovieDetailWidget(movie: snapshot.data as Movie);
+            return MovieDetailWidget(movie: snapshot.data as Movie?);
           }
         },
       ),
@@ -47,9 +45,9 @@ class MovieDetailScreen extends StatelessWidget {
 }
 
 class MovieDetailWidget extends StatelessWidget {
-  final Movie movie;
+  final Movie? movie;
 
-  const MovieDetailWidget({Key key, this.movie}) : super(key: key);
+  const MovieDetailWidget({Key? key, this.movie}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final scaffoldContext = Scaffold.of(context);
@@ -61,12 +59,12 @@ class MovieDetailWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ContentHeader(
-            sc1: movie.mediumScreenshotImage1,
-            sc2: movie.mediumScreenshotImage2,
-            sc3: movie.mediumScreenshotImage3,
+            sc1: movie!.backgroundImageOriginal,
+            sc2: movie!.mediumCoverImage,
+            sc3: movie!.largeCoverImage,
             child: Container(
               width: MediaQuery.of(context).size.width,
-              child: _movieInfoContainer(context, movie),
+              child: _movieInfoContainer(context, movie!),
             ),
           ),
           Padding(
@@ -75,7 +73,7 @@ class MovieDetailWidget extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 4,
-                  child: MovieTitle(movieTitle: movie.titleLong),
+                  child: MovieTitle(movieTitle: movie!.titleLong),
                 ),
                 Expanded(
                   flex: 1,
@@ -84,7 +82,7 @@ class MovieDetailWidget extends StatelessWidget {
                     icon: Icon(FluentIcons.add_circle_24_regular),
                     onPressed: () {
                       //saving this movie to local db as watchlist
-                      movieProvider.addToWatchList(movie);
+                      movieProvider.addToWatchList(movie!);
                       scaffoldContext.hideCurrentSnackBar();
                       scaffoldContext.showSnackBar(
                         SnackBar(
@@ -103,11 +101,11 @@ class MovieDetailWidget extends StatelessWidget {
           Wrap(
             direction: Axis.horizontal,
             children: [
-              ...movie.genres
+              ...movie!.genres!
                   .map(
                     (movie) => CustomChip(
                       label: movie.toString(),
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   )
                   .toList(),
@@ -117,10 +115,10 @@ class MovieDetailWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: MovieDescription(movie: movie),
           ),
-           BannerWidget(),
-          movie.cast == null ? SizedBox() : CastContainer(casts: movie.cast),
+          BannerWidget(),
+          movie!.cast == null ? SizedBox() : CastContainer(casts: movie!.cast),
           MovieContainer(
-            genre: movie.genres[0],
+            genre: movie!.genres![0],
             movieStack: MovieStack(
               sortBy: 'recently_added',
               stackName: 'Similar Movies',
@@ -143,16 +141,16 @@ class MovieDetailWidget extends StatelessWidget {
         child: YoutubePlayerBuilder(
           player: YoutubePlayer(
             controller: YoutubePlayerController(
-              initialVideoId: movie.ytTrailerCode,
+              initialVideoId: movie.ytTrailerCode!,
               flags: YoutubePlayerFlags(
                 autoPlay: true,
                 mute: false,
                 forceHD: true,
               ),
             ),
-            thumbnail: Image.network(movie.mediumCoverImage),
+            thumbnail: Image.network(movie.mediumCoverImage!),
             showVideoProgressIndicator: true,
-            progressIndicatorColor: Theme.of(context).accentColor,
+            progressIndicatorColor: Theme.of(context).colorScheme.secondary,
           ),
           builder: (context, player) {
             return player;
@@ -174,7 +172,7 @@ class MovieDetailWidget extends StatelessWidget {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  movie.mediumCoverImage,
+                  movie.mediumCoverImage!,
                 ),
               ),
             ),
@@ -218,11 +216,12 @@ class MovieDetailWidget extends StatelessWidget {
               TextButton.icon(
                 icon: Icon(
                   FluentIcons.arrow_download_24_regular,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 label: Text(
                   'Download',
-                  style: TextStyle(color: Theme.of(context).accentColor),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 onPressed: () {
                   showModalBottomSheet(
@@ -249,37 +248,40 @@ class MovieDetailWidget extends StatelessWidget {
 
 class MovieDescription extends StatelessWidget {
   const MovieDescription({
-    Key key,
-    @required this.movie,
+    Key? key,
+    required this.movie,
   }) : super(key: key);
 
-  final Movie movie;
+  final Movie? movie;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      movie.descriptionFull,
+      movie!.descriptionFull!,
       textAlign: TextAlign.left,
-      style:
-          Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.white60),
+      style: Theme.of(context)
+          .textTheme
+          .bodyText2!
+          .copyWith(color: Colors.white60),
       strutStyle: StrutStyle(leading: 0.5),
     );
   }
 }
 
 class MovieTitle extends StatelessWidget {
-  final String movieTitle;
+  final String? movieTitle;
 
   const MovieTitle({
-    Key key,
-    @required this.movieTitle,
+    Key? key,
+    required this.movieTitle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      movieTitle,
-      style: Theme.of(context).textTheme.headline6.copyWith(letterSpacing: 2.0),
+      movieTitle!,
+      style:
+          Theme.of(context).textTheme.headline6!.copyWith(letterSpacing: 2.0),
     );
   }
 }

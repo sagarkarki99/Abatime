@@ -8,14 +8,14 @@ import '../../routes.dart';
 import '../widgets/widgets.dart';
 import '../widgets/ads_widgets/banner_widget.dart';
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<MovieStack> movieStacks;
+  late List<MovieStack> movieStacks;
 
   @override
   void initState() {

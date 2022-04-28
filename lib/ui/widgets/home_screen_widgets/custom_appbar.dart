@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget {
-  CustomAppBar({Key key}) : super(key: key);
+  CustomAppBar({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     final genreProvider = Provider.of<GenreProvider>(context, listen: false);
@@ -13,8 +13,10 @@ class CustomAppBar extends StatelessWidget {
       backgroundColor: Colors.black,
       title: Text(
         'Aba Time',
-        style:
-            Theme.of(context).textTheme.headline4.copyWith(letterSpacing: -1.5),
+        style: Theme.of(context)
+            .textTheme
+            .headline4!
+            .copyWith(letterSpacing: -1.5),
       ),
       centerTitle: true,
       floating: true,
@@ -35,10 +37,11 @@ class CustomAppBar extends StatelessWidget {
                   onSelected: (selectedValue) {
                     genreProvider.setSelectedGenre(index);
                   },
-                  selectedColor: Theme.of(context).accentColor.withOpacity(0.3),
+                  selectedColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.3),
                   labelStyle: TextStyle(
                       color: genreProvider.selectedGenreIndex == index
-                          ? Theme.of(context).accentColor
+                          ? Theme.of(context).colorScheme.primary
                           : Colors.white60),
                   label: Text(genres[index]),
                   backgroundColor: Theme.of(context).secondaryHeaderColor),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ScreenTransition extends PageRouteBuilder {
-  final Widget page;
+  final Widget? page;
 
   ScreenTransition({this.page})
       : super(
-          pageBuilder: (context, animation, secondaryAnimation) => page,
+          pageBuilder: (context, animation, secondaryAnimation) => page!,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SlideTransition(
               position: Tween(
