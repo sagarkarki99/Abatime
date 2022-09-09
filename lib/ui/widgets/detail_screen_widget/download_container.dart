@@ -42,7 +42,7 @@ class _DownloadContainerState extends State<DownloadContainer> {
     return Expanded(
       flex: 1,
       child: InkWell(
-        splashColor: Theme.of(context).accentColor.withOpacity(0.5),
+        splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
         onTap: () {
           Navigator.pop(context);
           _openTorrentApp(torrent, context);
@@ -145,7 +145,7 @@ class __AnimatedAlertDialogState extends State<_AnimatedAlertDialog>
               .copyWith(color: Theme.of(context).errorColor),
         ),
         content: Text(
-            'Please install Bittorrent or Utoreent from play store to download movies.'),
+            'Please install Bittorrent or Utorrent from play store to download movies.'),
         actions: [
           TextButton(
             onPressed: () {

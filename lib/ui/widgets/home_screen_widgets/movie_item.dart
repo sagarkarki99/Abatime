@@ -25,6 +25,7 @@ class MovieItem extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: movie.mediumCoverImage ?? movie.largeCoverImage!,
               placeholder: (_, url) => ShimmerItem(),
+              errorWidget: (_, __, ___) => ShimmerItem(),
               fadeInDuration: Duration(milliseconds: 500),
               fadeInCurve: Curves.bounceInOut,
             ),
