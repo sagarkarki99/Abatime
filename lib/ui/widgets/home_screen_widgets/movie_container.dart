@@ -11,11 +11,11 @@ import '../ads_widgets/native_ad_widget.dart';
 import 'movie_item.dart';
 
 class MovieContainer extends StatefulWidget {
-  final MovieStack movieStack;
-  final String genre;
-  final Function(Movie movie) onMovieSelect;
+  final MovieStack? movieStack;
+  final String? genre;
+  final Function(Movie movie)? onMovieSelect;
   const MovieContainer(
-      {Key key, this.genre, this.movieStack, this.onMovieSelect})
+      {Key? key, this.genre, this.movieStack, this.onMovieSelect})
       : super(key: key);
 
   @override
@@ -38,16 +38,16 @@ class _MovieContainerState extends State<MovieContainer> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
           child: Text(
-            widget.movieStack.stackName,
+            widget.movieStack!.stackName,
             style: Theme.of(context)
                 .textTheme
-                .headline6
+                .headline6!
                 .copyWith(letterSpacing: 1.5, color: Colors.white70),
           ),
         ),
         const SizedBox(height: 8.0),
         FutureBuilder(
-          future: movieProvider.fetchMovies(widget.movieStack, widget.genre),
+          future: movieProvider.fetchMovies(widget.movieStack!, widget.genre),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return MovieListShimmer();
@@ -56,7 +56,7 @@ class _MovieContainerState extends State<MovieContainer> {
             } else {
               return MovieListContainer(
                   movieStack: widget.movieStack,
-                  onSelect: (movie) => widget.onMovieSelect(movie));
+                  onSelect: (movie) => widget.onMovieSelect!(movie));
             }
           },
         ),
@@ -66,9 +66,9 @@ class _MovieContainerState extends State<MovieContainer> {
 }
 
 class MovieListContainer extends StatefulWidget {
-  final MovieStack movieStack;
-  final Function(Movie) onSelect;
-  const MovieListContainer({Key key, @required this.movieStack, this.onSelect})
+  final MovieStack? movieStack;
+  final Function(Movie)? onSelect;
+  const MovieListContainer({Key? key, required this.movieStack, this.onSelect})
       : super(key: key);
 
   @override
@@ -84,14 +84,14 @@ class _MovieListContainerState extends State<MovieListContainer> {
   @override
   void initState() {
     super.initState();
-    for (var i = 0; i < widget.movieStack.movies.length + 3; i++) {
+    for (var i = 0; i < widget.movieStack!.movies!.length + 3; i++) {
       if (i == firstAdIndex || i == secondAdIndex || i == thirdAdIndex) {
         widgetsItem.add(NativeAdWidget());
       } else {
-        final movie = widget.movieStack.movies[_getItemIndex(i)];
+        final movie = widget.movieStack!.movies![_getItemIndex(i)];
         widgetsItem.add(
           InkWell(
-            onTap: () => widget.onSelect(movie),
+            onTap: () => widget.onSelect!(movie),
             child: MovieItem(movie: movie),
           ),
         );
@@ -114,7 +114,7 @@ class _MovieListContainerState extends State<MovieListContainer> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: widget.movieStack.sortBy == 'year' ? 16 / 14 : 16 / 10,
+      aspectRatio: widget.movieStack!.sortBy == 'year' ? 16 / 14 : 16 / 10,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: widgetsItem.length,

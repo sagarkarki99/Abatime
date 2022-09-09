@@ -19,7 +19,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  Timer apiCallTimer;
+  Timer? apiCallTimer;
 
   @override
   void dispose() {
@@ -29,9 +29,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   _searchMovieWith(String query) {
     if (apiCallTimer != null) {
-      apiCallTimer.cancel();
+      apiCallTimer!.cancel();
     }
-    apiCallTimer = Timer(Duration(seconds: 1), () {
+    apiCallTimer = Timer(Duration(seconds: 2), () {
       Provider.of<MovieProvider>(context, listen: false).searchMovieApi(query);
       setState(() {});
     });
@@ -45,12 +45,12 @@ class _SearchScreenState extends State<SearchScreen> {
         title: TextField(
           autofocus: true,
           autocorrect: true,
-          cursorColor: Theme.of(context).accentColor,
+          cursorColor: Theme.of(context).colorScheme.secondary,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: 'Search',
             prefixIcon: Icon(FluentIcons.search_24_filled,
-                color: Theme.of(context).accentColor),
+                color: Theme.of(context).colorScheme.secondary),
           ),
           onChanged: (inputQuery) => _searchMovieWith(inputQuery),
           onSubmitted: (inputQuery) => _searchMovieWith(inputQuery),
@@ -81,23 +81,27 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _loadSearchedMoviesGrid(List<Movie> searchedMovies) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: StaggeredGridView.countBuilder(
-        primary: false,
-        crossAxisCount: 4,
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-        itemCount: searchedMovies.length,
-        itemBuilder: (context, index) {
-          Movie movie = searchedMovies[index];
-          return SearchImageTile(
-            movie: movie,
-            onTap: (movie) => Navigator.of(context)
-                .pushNamed(Routes.movieDetailScreen, arguments: movie.id),
-          );
-        },
-        staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+    return GridView.custom(
+      gridDelegate: SliverWovenGridDelegate.count(
+        crossAxisCount: 2,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        pattern: [
+          WovenGridTile(3 / 4),
+          WovenGridTile(
+            5 / 7,
+            crossAxisRatio: 0.9,
+            alignment: AlignmentDirectional.center,
+          ),
+        ],
+      ),
+      childrenDelegate: SliverChildBuilderDelegate(
+        ((context, index) => SearchImageTile(
+              movie: searchedMovies[index],
+              onTap: (movie) => Navigator.of(context)
+                  .pushNamed(Routes.movieDetailScreen, arguments: movie!.id),
+            )),
+        childCount: searchedMovies.length,
       ),
     );
   }

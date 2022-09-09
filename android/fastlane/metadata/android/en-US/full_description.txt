@@ -1,0 +1,20 @@
+Aba time is a free movie app where you can browse and download the movie you like to watch.
+You can surf the movie app completely free without any registration.
+Major feature of this movie app are :
+	- View movies list according to genre.
+	- Search desired movie
+	- Add movies to watch list
+	- Watch trailer of any movie for free 
+	- View movies classified as per downloads, favourites, stats.
+Available genres:
+      - Action
+      - Thriller
+      - Crime
+      - Romance
+      - Adventure
+      - Drama
+      - Sci-fi
+      - Animation
+      - Fantasy
+      -Mystery
+All movies are free to browse, free to download in any quality(720p, 1080p)

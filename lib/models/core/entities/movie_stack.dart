@@ -9,9 +9,9 @@ class MovieStack extends AbaTimeStack<Movie> {
   final sortBy;
   final stackName;
   List<Movie> _movies = [];
-  MovieStack({this.sortBy = '',this.stackName = 'All Movies'});
+  MovieStack({this.sortBy = '', this.stackName = 'All Movies'});
 
-  List<Movie> get movies {
+  List<Movie>? get movies {
     if (_movies.isEmpty) {
       throw AppError('No Movies Available');
     }
@@ -24,7 +24,7 @@ class MovieStack extends AbaTimeStack<Movie> {
   }
 
   @override
-  Future<List<Movie>> retrieve(String genre) async {
+  Future<List<Movie>?> retrieve(String? genre) async {
     try {
       final data = await ApiClient.getInstance().get(
         '$MOVIE_LIST',
@@ -42,7 +42,7 @@ class MovieStack extends AbaTimeStack<Movie> {
               },
       );
       MovieResponse movieResponse = MovieResponse.fromJson(data);
-      _movies = movieResponse.data.movies;
+      _movies = movieResponse.data?.movies ?? [];
       return _movies;
     } catch (e) {
       rethrow;

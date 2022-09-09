@@ -8,7 +8,7 @@ Future<Database> _getDatabase() async =>
     openDatabase(join(await getDatabasesPath(), 'abaTime_database.db'),
         onCreate: (db, version) => db.execute(_createQuery), version: 1);
 
-Future<void> insert({dynamic data, String tableName}) async {
+Future<void> insert({required dynamic data, required String tableName}) async {
   assert(tableName != null);
   assert(data != null);
   Database database = await _getDatabase();
@@ -16,14 +16,14 @@ Future<void> insert({dynamic data, String tableName}) async {
       conflictAlgorithm: ConflictAlgorithm.replace);
 }
 
-Future<dynamic> retrieve({String tableName}) async {
+Future<dynamic> retrieve({required String tableName}) async {
   assert(tableName != null);
   final Database database = await _getDatabase();
   final List<Map<String, dynamic>> maps = await database.query('$tableName');
   return maps;
 }
 
-Future<void> delete(int id, String tableName) async {
+Future<void> delete(int? id, String tableName) async {
   Database database = await _getDatabase();
  final index = await database.delete(tableName, where: 'id = ?', whereArgs: [id]);
  print('Response is $index');

@@ -10,7 +10,7 @@ class BannerWidget extends StatefulWidget {
 }
 
 class _BannerWidgetState extends State<BannerWidget> {
-  BannerAd bannerAd;
+  BannerAd? bannerAd;
 
   @override
   void didChangeDependencies() {
@@ -21,13 +21,13 @@ class _BannerWidgetState extends State<BannerWidget> {
             adUnitId: adManager.bannerAdUnitId,
             size: AdSize.banner,
             request: AdRequest(),
-            listener: adManager.adListener,
+            listener: adManager.bannerAdListener,
           )..load();
         }));
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     bannerAd?.dispose();
     super.dispose();
   }
@@ -39,7 +39,7 @@ class _BannerWidgetState extends State<BannerWidget> {
         : Container(
             height: 50,
             child: AdWidget(
-              ad: bannerAd,
+              ad: bannerAd!,
             ),
           );
   }

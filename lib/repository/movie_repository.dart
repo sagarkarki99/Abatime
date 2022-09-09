@@ -10,7 +10,7 @@ import 'app_error.dart';
 import 'fake_movie_list.dart';
 
 class MovieRepository {
-  Future<Either<AppError, List<Movie>>> getAllMovies(
+  Future<Either<AppError, List<Movie>?>> getAllMovies(
       String sortName, String genre) async {
     try {
       final data = await ApiClient.getInstance().get(
@@ -31,13 +31,13 @@ class MovieRepository {
 
       // final Map<String, dynamic> data = _getDemoData(sortName);
       MovieResponse movieResponse = MovieResponse.fromJson(data);
-      return Right(movieResponse.data.movies);
+      return Right(movieResponse.data!.movies);
     } on HttpException catch (error) {
       return Left(AppError(error.toString()));
     }
   }
 
-  Future<movieDetail.Movie> getMovieDetailWith(String id) async {
+  Future<movieDetail.Movie?> getMovieDetailWith(String id) async {
     try {
       final response = await ApiClient.getInstance().get(MOVIE_DETAIL, {
         'movie_id': id,
@@ -46,21 +46,21 @@ class MovieRepository {
       });
       movieDetail.MovieDetail detail =
           movieDetail.MovieDetail.fromJson(response);
-      return detail.data.movie;
+      return detail.data!.movie;
     } catch (error) {
       throw AppError(error.toString());
     }
   }
 
-  Future<Either<AppError, List<Movie>>> getSearchedMoviesWith(
+  Future<Either<AppError, List<Movie>?>> getSearchedMoviesWith(
       String query) async {
     try {
       final responses = await ApiClient.getInstance().get(MOVIE_LIST, {
         'query_term': query,
       });
       MovieResponse movieResponse = MovieResponse.fromJson(responses);
-      if (movieResponse.data.movies != null) {
-        return Right(movieResponse.data.movies);
+      if (movieResponse.data!.movies != null) {
+        return Right(movieResponse.data!.movies);
       } else {
         return Left(AppError('No Result Found, Try Something Different!'));
       }
@@ -82,9 +82,9 @@ class MovieRepository {
 
   Future<List<DbMovie>> getAllWatchList() async {
     final List<Map<String, dynamic>> maps =
-        await localDb.retrieve(tableName: 'movies_table');
+        await (localDb.retrieve(tableName: 'movies_table'));
 
-    List<DbMovie> dbMovies = maps
+    List<DbMovie> dbMovies = (maps)
         .map(
           (movie) => DbMovie(
             id: movie['id'],
@@ -98,11 +98,11 @@ class MovieRepository {
     return dbMovies;
   }
 
-  removeFromWatchList(int id) async {
+  removeFromWatchList(int? id) async {
     await localDb.delete(id, 'movies_table');
   }
 
-  Map<String, dynamic> _getDemoData(String sortName) {
+  Map<String, dynamic>? _getDemoData(String sortName) {
     return fakeMovies[sortName];
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:abatime/config/utils/torrent_manager.dart';
 import 'package:abatime/models/MovieDetail.dart';
 import 'package:android_intent/android_intent.dart';
@@ -25,15 +24,15 @@ class _DownloadContainerState extends State<DownloadContainer> {
           topRight: Radius.circular(18.0),
         ),
       ),
-      child: widget.movie.torrents.length == 1
-          ? _downloadSide(context, widget.movie.torrents[0])
+      child: widget.movie.torrents!.length == 1
+          ? _downloadSide(context, widget.movie.torrents![0])
           : Row(
               children: [
-                _downloadSide(context, widget.movie.torrents[0]),
+                _downloadSide(context, widget.movie.torrents![0]),
                 VerticalDivider(
                   color: Colors.black,
                 ),
-                _downloadSide(context, widget.movie.torrents[1]),
+                _downloadSide(context, widget.movie.torrents![1]),
               ],
             ),
     );
@@ -43,7 +42,7 @@ class _DownloadContainerState extends State<DownloadContainer> {
     return Expanded(
       flex: 1,
       child: InkWell(
-        splashColor: Theme.of(context).accentColor.withOpacity(0.5),
+        splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
         onTap: () {
           Navigator.pop(context);
           _openTorrentApp(torrent, context);
@@ -60,7 +59,7 @@ class _DownloadContainerState extends State<DownloadContainer> {
               Icon(Icons.tv, size: 42, color: Colors.grey),
               Text(
                 '${torrent.quality}',
-                style: Theme.of(context).textTheme.headline5.copyWith(
+                style: Theme.of(context).textTheme.headline5!.copyWith(
                       letterSpacing: 2.0,
                       color: Colors.grey,
                     ),
@@ -68,14 +67,14 @@ class _DownloadContainerState extends State<DownloadContainer> {
               SizedBox(height: 8.0),
               Text(
                 '${torrent.type}',
-                style: Theme.of(context).textTheme.headline6.copyWith(
+                style: Theme.of(context).textTheme.headline6!.copyWith(
                       letterSpacing: 2.0,
                     ),
               ),
               SizedBox(height: 4.0),
               Text(
                 '${torrent.size}',
-                style: Theme.of(context).textTheme.caption.copyWith(
+                style: Theme.of(context).textTheme.caption!.copyWith(
                       color: Colors.grey,
                     ),
               ),
@@ -95,8 +94,70 @@ class _DownloadContainerState extends State<DownloadContainer> {
       );
       await intent.launch();
     } else {
-      await url.launch(
-          'https://play.google.com/store/apps/details?id=com.bittorrent.client&hl=en&gl=US');
+      showDialog(
+          context: context, builder: (context) => _AnimatedAlertDialog());
     }
+  }
+}
+
+class _AnimatedAlertDialog extends StatefulWidget {
+  const _AnimatedAlertDialog({Key? key}) : super(key: key);
+
+  @override
+  __AnimatedAlertDialogState createState() => __AnimatedAlertDialogState();
+}
+
+class __AnimatedAlertDialogState extends State<_AnimatedAlertDialog>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
+    animation = CurvedAnimation(
+      curve: Curves.elasticOut,
+      parent: animationController,
+    );
+    animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: animation,
+      child: AlertDialog(
+        title: Text(
+          'No Torrent client Found!',
+          style: Theme.of(context)
+              .textTheme
+              .headline6!
+              .copyWith(color: Theme.of(context).errorColor),
+        ),
+        content: Text(
+            'Please install Bittorrent or Utorrent from play store to download movies.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (animationController.isCompleted) {
+                animationController.reverse();
+              }
+              Navigator.of(context).pop();
+            },
+            child: Text('Okay'),
+          ),
+        ],
+      ),
+    );
   }
 }

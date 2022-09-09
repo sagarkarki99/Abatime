@@ -3,6 +3,7 @@ import 'package:abatime/ui/ui_utils.dart/slide_transition_container.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../repository/movie_repository.dart';
 import '../widgets/widgets.dart';
 import '../../routes.dart';
 
@@ -15,7 +16,11 @@ class WatchListScreen extends StatelessWidget {
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).secondaryHeaderColor,
-        title: Text('My Watch List'),
+        title: Text('My Watch List',
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                ?.copyWith(color: Colors.white)),
         centerTitle: true,
       ),
       body: FutureBuilder(
@@ -32,12 +37,12 @@ class WatchListScreen extends StatelessWidget {
                 ),
               ));
             } else {
+              final data = snapshot.data as List<DbMovie>;
               return Container(
                 child: ListView.builder(
-                  itemCount: snapshot.data.length,
+                  itemCount: data.length,
                   itemBuilder: (context, index) => Dismissible(
-                    key: ValueKey(
-                        '${snapshot.data[index].title}/${snapshot.data[index].year}'),
+                    key: ValueKey('${data[index].title}/${data[index].year}'),
                     background: Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -52,24 +57,25 @@ class WatchListScreen extends StatelessWidget {
                     ),
                     direction: DismissDirection.endToStart,
                     onDismissed: (direction) {
-                      provider.deleteItem(snapshot.data[index].id);
-                      scaffoldKey.currentState
+                      provider.deleteItem(data[index].id);
+                      ScaffoldMessenger.of(context)
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
                           SnackBar(
                             content: Text('Removed from watch list.'),
-                            backgroundColor: Theme.of(context).accentColor,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
                           ),
                         );
                     },
                     child: CustomListItem(
-                      title: snapshot.data[index].title,
-                      subtitle: snapshot.data[index].year.toString(),
-                      imageUrl: snapshot.data[index].imageUrl,
-                      trailingItem: snapshot.data[index].rating.toString(),
+                      title: data[index].title,
+                      subtitle: data[index].year.toString(),
+                      imageUrl: data[index].imageUrl,
+                      trailingItem: data[index].rating.toString(),
                       onTap: () => Navigator.of(context).pushNamed(
                           Routes.movieDetailScreen,
-                          arguments: snapshot.data[index].id),
+                          arguments: data[index].id),
                     ),
                   ),
                 ),

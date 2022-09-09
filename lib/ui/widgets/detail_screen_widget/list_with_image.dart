@@ -2,9 +2,9 @@ import 'package:abatime/models/MovieDetail.dart';
 import 'package:flutter/material.dart';
 
 class CastContainer extends StatelessWidget {
-  final List<Cast> casts;
+  final List<Cast>? casts;
 
-  const CastContainer({Key key, this.casts}) : super(key: key);
+  const CastContainer({Key? key, this.casts}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,9 +18,9 @@ class CastContainer extends StatelessWidget {
           height: 150.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: casts.length,
+            itemCount: casts!.length,
             itemBuilder: (context, index) => CastItem(
-              cast: casts[index],
+              cast: casts![index],
             ),
           ),
         ),
@@ -30,9 +30,12 @@ class CastContainer extends StatelessWidget {
 }
 
 class CastItem extends StatelessWidget {
-  final cast;
+  final Cast cast;
 
-  const CastItem({Key key, this.cast}) : super(key: key);
+  const CastItem({
+    Key? key,
+    required this.cast,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,13 +48,15 @@ class CastItem extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Image.network(
-              cast.urlSmallImage,
+              cast.urlSmallImage == null
+                  ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
+                  : cast.urlSmallImage!,
               width: 100,
               fit: BoxFit.fill,
             ),
           ),
           Text(
-            cast.name,
+            cast.name!,
             style: Theme.of(context).textTheme.bodyText1,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -60,10 +65,10 @@ class CastItem extends StatelessWidget {
             height: 4.0,
           ),
           Text(
-            cast.characterName,
+            cast.characterName!,
             style: Theme.of(context)
                 .textTheme
-                .caption
+                .caption!
                 .copyWith(color: Colors.white70),
           ),
         ],

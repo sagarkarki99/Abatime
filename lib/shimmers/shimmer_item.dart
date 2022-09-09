@@ -4,7 +4,7 @@ class ShimmerItem extends StatelessWidget {
   final double height;
   final double width;
 
-  const ShimmerItem({Key key, this.height = 170, this.width = 120})
+  const ShimmerItem({Key? key, this.height = 170, this.width = 120})
       : super(key: key);
 
   @override

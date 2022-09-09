@@ -7,9 +7,9 @@ class MovieStatInfo extends StatefulWidget {
   final IconData iconData;
 
   const MovieStatInfo({
-    Key key,
-    @required this.label,
-    @required this.iconData,
+    Key? key,
+    required this.label,
+    required this.iconData,
   }) : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class MovieStatInfo extends StatefulWidget {
 
 class _MovieStatInfoState extends State<MovieStatInfo>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
+  late AnimationController _animationController;
   @override
   void initState() {
     super.initState();

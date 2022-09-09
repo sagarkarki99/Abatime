@@ -1,34 +1,32 @@
-import 'dart:math';
-
 import 'package:abatime/models/Movie.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 class SearchImageTile extends StatelessWidget {
-  final Movie movie;
-  final Function(Movie Movie) onTap;
+  final Movie? movie;
+  final Function(Movie? Movie)? onTap;
 
   SearchImageTile({this.movie, this.onTap});
 
-  final _IntSize _size =
-      _IntSize(Random().nextInt(250) + 100, Random().nextInt(350) + 100);
+  // final _IntSize _size =
+  //     _IntSize(Random().nextInt(250) + 100, Random().nextInt(350) + 100);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Theme.of(context).primaryColor.withOpacity(0.4),
-      onTap: () => onTap(movie),
+      onTap: () => onTap!(movie),
       child: Stack(
         children: [
           CachedNetworkImage(
-            height: _size.height.toDouble(),
-            // width: _size.width.toDouble(),
-            imageUrl: movie.mediumCoverImage,
-            fit: BoxFit.fill,
+            height: double.infinity,
+            width: double.infinity,
+            imageUrl: movie!.mediumCoverImage!,
+            fit: BoxFit.cover,
           ),
           Container(
-            height: _size.height.toDouble(),
+            // height: _size.height.toDouble(),
             // width: _size.width.toDouble(),
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -40,21 +38,20 @@ class SearchImageTile extends StatelessWidget {
                   ]),
             ),
           ),
-         
           Positioned(
             top: 12.0,
             right: 12.0,
             child: Row(
               children: [
                 Text(
-                  movie.rating.toString(),
-                  style: Theme.of(context).textTheme.bodyText2.copyWith(
-                        color: Theme.of(context).accentColor,
+                  movie!.rating.toString(),
+                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                 ),
                 Icon(
                   FluentIcons.star_24_filled,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 )
               ],
             ),

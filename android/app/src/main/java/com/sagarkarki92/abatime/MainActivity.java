@@ -11,7 +11,7 @@ public class MainActivity extends FlutterActivity {
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
-        final NativeAdFactory factory = new NativeAdView(getLayoutInflater());
+        final NativeAdFactory factory = new CustomNativeAdView(getLayoutInflater());
         GoogleMobileAdsPlugin.registerNativeAdFactory(flutterEngine, "nativeAd", factory);
     }
 

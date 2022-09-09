@@ -13,7 +13,7 @@ class TorrentManager {
   ];
   static String _availableclient = '';
 
-  static getMagnetUrl(String hash, String url) {
+  static getMagnetUrl(String? hash, String? url) {
     return 'magnet:?xt=urn:btih:$hash&dn=$url&tr=http://track.one:1234/announce&tr=udp://track.two:80';
   }
 

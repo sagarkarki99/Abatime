@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CustomLabelWithIcon extends StatelessWidget {
-  final String label;
+  final String? label;
   final Color labelColor;
-  final IconData icon;
+  final IconData? icon;
   final Color iconColor;
 
   CustomLabelWithIcon(
-      {Key key,
+      {Key? key,
       this.label,
       this.icon,
       this.labelColor = Colors.white,
@@ -27,8 +27,8 @@ class CustomLabelWithIcon extends StatelessWidget {
         ),
         SizedBox(height: 8.0),
         Text(
-          label,
-          style: Theme.of(context).textTheme.bodyText1.copyWith(
+          label!,
+          style: Theme.of(context).textTheme.bodyText1!.copyWith(
                 color: labelColor.withOpacity(0.5),
               ),
         )
