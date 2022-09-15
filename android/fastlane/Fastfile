@@ -32,9 +32,9 @@ platform :android do
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    # build(command: "flutter build appbundle")
+    build(command: "flutter build appbundle")
     upload_to_play_store(
-      
+      skip_upload_metadata:true,
       aab:"./../build/app/outputs/bundle/release/app-release.aab"
     )
   end
